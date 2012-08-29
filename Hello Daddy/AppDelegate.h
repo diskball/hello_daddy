@@ -7,14 +7,21 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreData/CoreData.h>
 
 @class RootViewController;
 
 @interface AppDelegate : NSObject <UIApplicationDelegate> {
 	UIWindow			*window;
 	RootViewController	*viewController;
+    int score;
+    int lives;
+    BOOL secondTime;
 }
 
 @property (nonatomic, retain) UIWindow *window;
+@property int score;
+@property int lives;
+@property BOOL secondTime;
 
 @end

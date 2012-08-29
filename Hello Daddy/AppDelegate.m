@@ -12,14 +12,17 @@
 #import "GameConfig.h"
 #import "HelloWorldLayer.h"
 #import "RootViewController.h"
+#import "LeaderBoard.h"
 
 @implementation AppDelegate
 
 @synthesize window;
+@synthesize score;
+@synthesize lives;
+@synthesize secondTime;
 
 - (void) removeStartupFlicker
-{
-	//
+{	//
 	// THIS CODE REMOVES THE STARTUP FLICKER
 	//
 	// Uncomment the following code if you Application only supports landscape mode
@@ -104,7 +107,12 @@
 	// It can be RGBA8888, RGBA4444, RGB5_A1, RGB565
 	// You can change anytime.
 	[CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_RGBA8888];
-
+    
+	score = 0;
+    
+    lives = 5;
+    
+    secondTime=FALSE;
 	
 	// Removes the startup flicker
 	[self removeStartupFlicker];
