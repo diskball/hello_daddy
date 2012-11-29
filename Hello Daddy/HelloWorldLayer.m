@@ -13,10 +13,8 @@
 #import "GameOverClass.h"
 #import "Level1Layer.h"
 #import "Monster.h"
-#import "Lavel2Layer.h"
-#import "Level3Layer.h"
-#import "Level4Layer.h"
 #import "Rankings.h"
+#import "AppDelegate.h"
 // HelloWorldLayer implementation
 @implementation HelloWorldLayer
 
@@ -43,38 +41,50 @@
 {
 	if( (self=[super initWithColor:ccc4(255,255,255,255)] )) {
         //preload music and sound effects
-        [[SimpleAudioEngine sharedEngine] preloadEffect:@"orgasm.mp3"];
-        [[SimpleAudioEngine sharedEngine] preloadBackgroundMusic:@"flashsperm.mp3"];
+        [[SimpleAudioEngine sharedEngine] preloadEffect:LoadingEffect];
+        [[SimpleAudioEngine sharedEngine] preloadBackgroundMusic:MenuMusic];
         
         self.isTouchEnabled = YES;
         
         CGSize winSize = [[CCDirector sharedDirector] winSize];
         
-        CCSprite* background = [CCSprite spriteWithFile:@"bg1.jpg"];
-        background.tag = 1;
-        background.anchorPoint = CGPointMake(0, 0);
-        [self addChild:background];
+        if (winSize.width>1000) {
+            //init bg picture
+            CCSprite* background = [CCSprite spriteWithFile:MenuBackgroundIphone5];
+            background.tag = 1;
+            background.anchorPoint = CGPointMake(0, 0);
+            [self addChild:background];
+            
+        }else{
+            //init bg picture
+            CCSprite* background = [CCSprite spriteWithFile:MenuBackground];
+            background.tag = 1;
+            background.anchorPoint = CGPointMake(0, 0);
+            [self addChild:background];
+            
+        }
+
         
         
-        // Opening Text
+        /* Opening Text
         self.label = [CCLabelTTF labelWithString:@"Welcome! Choose Level!" fontName:@"Arial" fontSize:32];
         _label.color = ccc3(255,255,255);
         _label.position = ccp(winSize.width/2, winSize.height/2);
         [self addChild:_label];
-        
+        */
         
         // Standard method to create a button
         CCMenuItem *startGame = [CCMenuItemImage
-                                    itemFromNormalImage:@"startGame.png" selectedImage:@"startGame.png" 
+                                    itemFromNormalImage:StartGameButton selectedImage:StartGameButton
                                  target:self selector:@selector(startGame) ];
         
-        startGame.position = ccp(winSize.width/2, winSize.height/2-50);
+        startGame.position = ccp(winSize.width/2, winSize.height/2+50);
         
         CCMenuItem *highscores = [CCMenuItemImage
-                                 itemFromNormalImage:@"highscores.png" selectedImage:@"highscores.png"
+                                 itemFromNormalImage:HighScoresButton selectedImage:HighScoresButton
                                  target:self selector:@selector(showRankings) ];
         
-        highscores.position = ccp(winSize.width/2, winSize.height/2-100);
+        highscores.position = ccp(winSize.width/2, winSize.height/2-50);
         
         CCMenu *levelMenu = [CCMenu menuWithItems:startGame,highscores, nil];
         levelMenu.position = CGPointZero;
@@ -87,7 +97,7 @@
                          nil]];
          */
         // Start up the background music
-		[[SimpleAudioEngine sharedEngine] playBackgroundMusic:@"flashsperm.mp3" loop:YES];
+		[[SimpleAudioEngine sharedEngine] playBackgroundMusic:MenuMusic loop:YES];
         
     }	
     return self;
@@ -96,16 +106,15 @@
     [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration: 0.2 scene:[Rankings scene]]];
 }
 - (void)startGame{
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     [[SimpleAudioEngine sharedEngine] stopBackgroundMusic];
-    [[SimpleAudioEngine sharedEngine] playEffect:@"orgasm.mp3"];
+    [[SimpleAudioEngine sharedEngine] playEffect:LoadingEffect];
     [self performSelector:@selector(startLevel)
                withObject:nil afterDelay:3.0f];
-    
-    
-    
+    appDelegate.lives=5;
 }
 -(void)startLevel{
-    [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration: 0.5 scene:[Level1Layer scene]]];
+    [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration: 0.3 scene:[Level1Layer scene]]];
 }
 
 

@@ -7,7 +7,7 @@
 //
 
 #import "cocos2d.h"
-
+#import "Consts.h"
 @interface Rankings : CCLayerColor{
     CCLabelTTF *_label;
     NSManagedObjectContext *managedObjectContext;

@@ -7,7 +7,7 @@
 //
 
 #import "cocos2d.h"
-
+#import "Consts.h"
 @interface GameOverLayer : CCLayerColor  {
     CCLabelTTF *_label;
     NSManagedObjectContext *managedObjectContext;

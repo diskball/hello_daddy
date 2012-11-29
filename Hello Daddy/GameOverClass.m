@@ -34,6 +34,7 @@
 
 @implementation GameOverLayer
 @synthesize label = _label;
+@synthesize win;
 
 // My addition
 @synthesize managedObjectContext = _managedObjectContext;
@@ -48,14 +49,14 @@
         // url is now "<Documents Directory>/Default SDiOS Database"
         
         NSError *error = nil;
-        NSPersistentStoreCoordinator *persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[NSManagedObjectModel mergedModelFromBundles:nil]];
+        NSPersistentStoreCoordinator *persistentStoreCoordinator = [[[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[NSManagedObjectModel mergedModelFromBundles:nil]] autorelease];
         
         if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeDatabasedUrl options:nil error:&error])
         {
             NSLog(@"Error while loading persistent﻿ store...");
         }
         
-        managedObjectContext = [[NSManagedObjectContext alloc]init];
+        managedObjectContext = [[[NSManagedObjectContext alloc] init] autorelease];
         [managedObjectContext setPersistentStoreCoordinator:persistentStoreCoordinator];
     }
     
@@ -77,14 +78,23 @@
 {
     if( (self=[super initWithColor:ccc4(255,255,255,255)] )) {
         CGSize winSize = [[CCDirector sharedDirector] winSize];
-        [[SimpleAudioEngine sharedEngine] playBackgroundMusic:@"babyCry.mp3" loop:YES];
-         CCSprite* background = [CCSprite spriteWithFile:@"bg1.jpg"];
-        background.tag = 1;
-        background.anchorPoint = CGPointMake(0, 0);
-        [self addChild:background];
+        [[SimpleAudioEngine sharedEngine] playBackgroundMusic:YouLoseEffect loop:YES];
+        if (winSize.width>1000) {
+            //init bg picture
+            CCSprite* background = [CCSprite spriteWithFile:GameOverBackgroundIphone5];
+            background.tag = 1;
+            background.anchorPoint = CGPointMake(0, 0);
+            [self addChild:background];
+            
+        }else{
+            //init bg picture
+            CCSprite* background = [CCSprite spriteWithFile:GameOverBackground];
+            background.tag = 1;
+            background.anchorPoint = CGPointMake(0, 0);
+            [self addChild:background];
+            
+        }
 
-        
-        
         self.label = [CCLabelTTF labelWithString:@"" dimensions:CGSizeMake(winSize.height, winSize.width/2) alignment:UITextAlignmentCenter fontName:@"Arial" fontSize:32 ];
         _label.color = ccc3(255,255,255);
         _label.position = ccp(winSize.width/2, winSize.height/2);

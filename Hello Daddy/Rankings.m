@@ -95,7 +95,7 @@
         
         CGSize winSize = [[CCDirector sharedDirector] winSize];
         
-        CCSprite* background = [CCSprite spriteWithFile:@"bg1.jpg"];
+        CCSprite* background = [CCSprite spriteWithFile:HighscoresBackground];
         background.tag = 1;
         background.anchorPoint = CGPointMake(0, 0);
         [self addChild:background];
@@ -111,7 +111,7 @@
         [ranks release];
         // Standard method to create a button
         CCMenuItem *back = [CCMenuItemImage
-                                 itemFromNormalImage:@"back.png" selectedImage:@"back.png"
+                                 itemFromNormalImage:MainMenuBackButton selectedImage:MainMenuBackButton
                                  target:self selector:@selector(returnToMenu) ];
         
         back.position = ccp(winSize.width/2, 290);
