@@ -11,6 +11,7 @@
 #import "HudLayer.h"
 #import "LivesLayer.h"
 #import "Consts.h"
+
 // Lavel2Layer
 @interface Lavel2Layer : CCLayerColor
 {
