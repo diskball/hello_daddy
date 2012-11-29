@@ -41,3 +41,8 @@
 }
 +(id)monster;
 @end
+
+@interface BigBoss : Monster {
+}
++(id)monster;
+@end

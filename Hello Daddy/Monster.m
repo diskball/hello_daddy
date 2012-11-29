@@ -39,7 +39,7 @@
 + (id)monster {
     
     StrongAndSlowMonster *monster = nil;
-    if ((monster = [[[super alloc] initWithFile:@"sp1.png"] autorelease])) {
+    if ((monster = [[[super alloc] initWithFile:@"fat_headed_sperm_frame.png"] autorelease])) {
         monster.hp = 3;
         monster.minMoveDuration = 8;
         monster.maxMoveDuration = 14;
@@ -56,7 +56,7 @@
 + (id)monster {
     
     Virus1 *monster = nil;
-    if ((monster = [[[super alloc] initWithFile:@"virus.png"] autorelease])) {
+    if ((monster = [[[super alloc] initWithFile:@"virus_1.png"] autorelease])) {
         monster.hp = 5;
         monster.minMoveDuration = 8;
         monster.maxMoveDuration = 14;
@@ -73,11 +73,28 @@
 + (id)monster {
     
     FirstBoss *monster = nil;
-    if ((monster = [[[super alloc] initWithFile:@"boss1.png"] autorelease])) {
+    if ((monster = [[[super alloc] initWithFile:@"virus_boss.png"] autorelease])) {
         monster.hp = 30;
         monster.minMoveDuration = 30;
         monster.maxMoveDuration = 35;
         monster.points=1000;
+    }
+    return monster;
+    
+}
+
+@end
+
+@implementation BigBoss
+
++ (id)monster {
+    
+    BigBoss *monster = nil;
+    if ((monster = [[[super alloc] initWithFile:@"boss0.png"] autorelease])) {
+        monster.hp = 40;
+        monster.minMoveDuration = 30;
+        monster.maxMoveDuration = 35;
+        monster.points=5000;
     }
     return monster;
     
