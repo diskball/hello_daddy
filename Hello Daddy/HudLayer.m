@@ -18,7 +18,7 @@
         label = [CCLabelTTF labelWithString:@"0" dimensions:CGSizeMake(100, 20)
                                   alignment:UITextAlignmentRight fontName:@"Verdana-Bold" 
                                    fontSize:15.0];
-        label.color = ccc3(0,0,0);
+        label.color = ccc3(255,255,255);
         int margin = 10;
         label.position = ccp(winSize.width - (label.contentSize.width/2) 
                              - margin, label.contentSize.height/2 + margin);
