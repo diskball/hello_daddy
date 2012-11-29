@@ -1,4 +1,4 @@
-//
+ //
 //  Level1Layer.m
 //  Cocos2DSimpleGame
 //
@@ -20,6 +20,12 @@
 @synthesize walkAction = _walkAction;
 @synthesize hud = _hud;
 @synthesize lives = _lives;
+//pause
+@synthesize _movingSpring;
+@synthesize pauseLayer;
+@synthesize _pauseScreen;
+@synthesize _pauseScreenMenu;
+@synthesize bombItem;
 +(CCScene *) scene
 {
 	// 'scene' is an autorelease object.
@@ -33,13 +39,13 @@
 	
     //add hud layer
     HudLayer *hud = [HudLayer node];    
-    [scene addChild: hud];
+    [scene addChild: hud z:2];
     
     layer.hud = hud;
     
     //add lives layer
     LivesLayer *lives = [LivesLayer node];    
-    [scene addChild: lives];
+    [scene addChild: lives z:2];
     
     layer.lives = lives;
     
@@ -57,13 +63,13 @@
         }else {
             [_targets removeObject:sprite];
             GameOverScene *gameOverScene = [GameOverScene node];
-            NSString *labelText=[NSString stringWithFormat:@"Hello Daddy...!!! \nShake your iphone to make it sleep. \nScore: %i",appDelegate.score];
+            NSString *labelText=[NSString stringWithFormat:LoseMessage,appDelegate.score];
             appDelegate.secondTime=FALSE;
             [gameOverScene.layer.label setString:labelText];
             [[CCDirector sharedDirector] replaceScene:gameOverScene];
         }
         
-    } else if (sprite.tag == 2) { // projectile
+    } else if (sprite.tag == 2 || sprite.tag==20 || sprite.tag==10) { // projectile
         [_projectiles removeObject:sprite];
     }
 }
@@ -105,17 +111,17 @@
     
     //CCSprite *target = [CCSprite spriteWithFile:@"Target.png" rect:CGRectMake(0, 0, 27, 40)]; 
     Monster *target = nil;
-    
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:
-     @"sperm_default.plist"];
+    EnemySpermPlist];
     CCSpriteBatchNode *spriteSheet = [CCSpriteBatchNode 
-                                      batchNodeWithFile:@"sperm_default.png"];
+                                      batchNodeWithFile:EnemySpermDefault];
     [self addChild:spriteSheet];
     NSMutableArray *walkAnimFrames = [NSMutableArray array];
     for(int i = 0; i <= 2; ++i) {
         [walkAnimFrames addObject:
          [[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:
-          [NSString stringWithFormat:@"sp%d.png", i]]];
+          [NSString stringWithFormat:EnemySpermFrames, i]]];
     }
     
     CCAnimation *walkAnim = [CCAnimation 
@@ -140,8 +146,17 @@
     [self addChild:target];
     
     // Determine speed of the target
-    int minDuration = target.minMoveDuration; //2.0;
-    int maxDuration = target.maxMoveDuration; //4.0;
+    int minDuration = 0;
+    int maxDuration = 0;
+    
+    if (appDelegate.secondTime) {
+        minDuration = 4.0; //2.0;
+        maxDuration = 8.0; //4.0;
+    }else{
+        minDuration = target.minMoveDuration; //2.0;
+        maxDuration = target.maxMoveDuration; //4.0;
+    }
+
     int rangeDuration = maxDuration - minDuration;
     int actualDuration = (arc4random() % rangeDuration) + minDuration;
     
@@ -158,7 +173,7 @@
     [self addTarget];
 }
 - (void)ccTouchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    [[SimpleAudioEngine sharedEngine] playEffect:@"scifi003.mp3"];
+    [[SimpleAudioEngine sharedEngine] playEffect:CondomFired];
     
     // Choose one of the touches to work with
     UITouch *touch = [touches anyObject];
@@ -167,7 +182,7 @@
     
     // Set up initial location of projectile
     CGSize winSize = [[CCDirector sharedDirector] winSize];
-    CCSprite *projectile = [CCSprite spriteWithFile:@"condom.png" 
+    CCSprite *projectile = [CCSprite spriteWithFile:PlayerImage 
                                                rect:CGRectMake(0, 0, 68, 20)];
     projectile.position = ccp(20, winSize.height/2);
     
@@ -225,20 +240,30 @@
             
             if (CGRectIntersectsRect(projectileRect, targetRect)) {
                 monsterHit = TRUE;
-                if (target.tag!=10) {
+                if (projectile.tag==20 && target.tag==1) {
+                    Monster *monster = (Monster *)target;
+                    monster.hp=monster.hp-10;
+                    [targetsToDelete addObject:target];
+                    //[[SimpleAudioEngine sharedEngine] playEffect:@"scream.wav"];
+                    appDelegate.score=appDelegate.score+monster.points;
+                    [_hud numCollectedChanged:appDelegate.score];
+                    NSLog(@"Monster points: %i",monster.points);
+                    [[SimpleAudioEngine sharedEngine] playEffect:KillEffect];
+                    break;
+                }
+                else if (target.tag!=10 && projectile.tag!=20) {
                     Monster *monster = (Monster *)target;
                     monster.hp--;
                     if (monster.hp <= 0) {
-                        
                         [targetsToDelete addObject:target];
                         //[[SimpleAudioEngine sharedEngine] playEffect:@"scream.wav"];
                         appDelegate.score=appDelegate.score+monster.points;
                         [_hud numCollectedChanged:appDelegate.score];
                         NSLog(@"Monster points: %i",monster.points);
-                        [[SimpleAudioEngine sharedEngine] playEffect:@"blast.mp3"];
+                        [[SimpleAudioEngine sharedEngine] playEffect:KillEffect];
                     }
                     break;
-                }else{
+                }else if(target.tag==10){
                     PowerUp *powerUp = (PowerUp *)target;
                     powerUp.hp--;
                     if (powerUp.hp<=0) {
@@ -250,9 +275,9 @@
                                 appDelegate.lives++;
                                 [_lives livesChanged:appDelegate.lives];
                             }
-                            [[SimpleAudioEngine sharedEngine] playEffect:@"liveUpSound.mp3"];
+                            [[SimpleAudioEngine sharedEngine] playEffect:HeartEffect];
                         }else if ([powerUp.name isEqualToString:@"Star"]){
-                            [[SimpleAudioEngine sharedEngine] playEffect:@"starSound.mp3"];
+                            [[SimpleAudioEngine sharedEngine] playEffect:BonusEffect];
                         }
                         NSLog(@"Power Up collected");
                     }
@@ -266,16 +291,18 @@
             [_targets removeObject:target];
             [self removeChild:target cleanup:YES];
             _projectilesDestroyed++;
-            if (_projectilesDestroyed == 51) {
+            if (_projectilesDestroyed == Level1Kills) {
                 [[SimpleAudioEngine sharedEngine] stopBackgroundMusic];
-                [[SimpleAudioEngine sharedEngine] playEffect:@"orgasm.mp3"];
+                [[SimpleAudioEngine sharedEngine] playEffect:LoadingEffect];
                 [self performSelector:@selector(startLevel)
                            withObject:nil afterDelay:3.0f];
             }
         }
         
         if (targetsToDelete.count > 0 || monsterHit) {
-            [projectilesToDelete addObject:projectile];
+            if (projectile.tag!=20) {
+                [projectilesToDelete addObject:projectile];
+            }
         }
         [targetsToDelete release];
     }
@@ -300,12 +327,16 @@
         
         AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
         //preload music and sound effects
-        [[SimpleAudioEngine sharedEngine] preloadEffect:@"orgasm.mp3"];
-        [[SimpleAudioEngine sharedEngine] preloadBackgroundMusic:@"peter_gunn.mp3"];
-        [[SimpleAudioEngine sharedEngine] preloadEffect:@"scifi003.mp3"];
-        [[SimpleAudioEngine sharedEngine] preloadEffect:@"liveUpSound.mp3"];
-        [[SimpleAudioEngine sharedEngine] preloadEffect:@"starSound.mp3"];
-        [[SimpleAudioEngine sharedEngine] preloadEffect:@"blast.mp3"];
+        [[SimpleAudioEngine sharedEngine] preloadEffect:LoadingEffect];
+        if (appDelegate.secondTime) {
+            [[SimpleAudioEngine sharedEngine] preloadBackgroundMusic:Level1MusicSec];
+        }else{
+            [[SimpleAudioEngine sharedEngine] preloadBackgroundMusic:Level1Music];
+        }
+        [[SimpleAudioEngine sharedEngine] preloadEffect:CondomFired];
+        [[SimpleAudioEngine sharedEngine] preloadEffect:HeartEffect];
+        [[SimpleAudioEngine sharedEngine] preloadEffect:BonusEffect];
+        [[SimpleAudioEngine sharedEngine] preloadEffect:KillEffect];
 		// Enable touch events
 		self.isTouchEnabled = YES;
 		
@@ -313,41 +344,153 @@
 		_targets = [[NSMutableArray alloc] init];
 		_projectiles = [[NSMutableArray alloc] init];
         
-        //init bg picture
-		CCSprite* background = [CCSprite spriteWithFile:@"bg2.png"];
-        background.tag = 1;
-        background.anchorPoint = CGPointMake(0, 0);
-        [self addChild:background];
-        
-		
         // Get the dimensions of the window for calculation purposes
 		CGSize winSize = [[CCDirector sharedDirector] winSize];
-		
+        NSLog(@"%f",winSize.height);
+        NSLog(@"%f",winSize.width);
+        CCSprite* background;
+        if (winSize.width==568) {
+            //init bg picture
+            if (appDelegate.secondTime) {
+                background = [CCSprite spriteWithFile:Level5BackgroundIphone5];
+            }else{
+                background = [CCSprite spriteWithFile:Level1BackgroundIphone5];
+            }
+            background.tag = 1;
+            background.anchorPoint = CGPointMake(0, 0);
+            [self addChild:background];
+
+        }else{
+            //init bg picture
+            if (appDelegate.secondTime) {
+                background = [CCSprite spriteWithFile:Level5Background];
+            }else{
+                background = [CCSprite spriteWithFile:Level1Background];
+            }
+            background.tag = 1;
+            background.anchorPoint = CGPointMake(0, 0);
+            [self addChild:background];
+
+        }
+                
 		// Add the player to the middle of the screen along the y-axis, 
 		// and as close to the left side edge as we can get
 		// Remember that position is based on the anchor point, and by default the anchor
 		// point is the middle of the object.
-		CCSprite *player = [CCSprite spriteWithFile:@"condom.png" rect:CGRectMake(0, 0, 68, 40)];
+		CCSprite *player = [CCSprite spriteWithFile:PlayerImage rect:CGRectMake(0, 0, 68, 40)];
 		player.position = ccp(player.contentSize.width/2, winSize.height/2);
 		[self addChild:player];
-		
+		[[SimpleAudioEngine sharedEngine] stopBackgroundMusic];
         if (appDelegate.secondTime) {
             // Call game logic about every second
             [self schedule:@selector(gameLogic:) interval:0.5];
+            // Start up the background music
+            [[SimpleAudioEngine sharedEngine] playBackgroundMusic:Level1MusicSec loop:YES];
         }else{
             // Call game logic about every second
             [self schedule:@selector(gameLogic:) interval:1.0];
+            // Start up the background music
+            [[SimpleAudioEngine sharedEngine] playBackgroundMusic:Level1Music loop:YES];
         }
 		
 		[self schedule:@selector(update:)];
 		
-		// Start up the background music
-		[[SimpleAudioEngine sharedEngine] playBackgroundMusic:@"peter_gunn.mp3" loop:YES];
+		
         [self performSelector:@selector(addPowerUp) withObject:nil
                    afterDelay:5];
-		
+        
+        // Standard method to create a button
+        
+        //pause menu
+        _pauseScreenUp=FALSE;
+        CCMenuItem *pauseMenuItem = [CCMenuItemImage
+                            itemFromNormalImage:PauseButton selectedImage:PauseButton
+                            target:self selector:@selector(pauseGame) ];
+        
+        pauseMenuItem.position = ccp(16, 16);
+        
+        bombItem = [CCMenuItemImage
+                    itemFromNormalImage:BombButton selectedImage:BombButton
+                                     target:self selector:@selector(fireBomb) ];
+        
+        bombItem.position = ccp((winSize.width/2)-30, winSize.height-15);
+        
+        CCMenu *pauseMenu = [CCMenu menuWithItems:pauseMenuItem,bombItem, nil];
+        pauseMenu.position = CGPointZero;
+        [self addChild:pauseMenu z:2];
+        
+        
 	}
 	return self;
+}
+-(void)pauseGame{
+
+    if(_pauseScreenUp ==FALSE)
+    {
+        _pauseScreenUp=TRUE;
+        //if you have music uncomment the line bellow
+        //[[SimpleAudioEngine sharedEngine] pauseBackgroundMusic];
+        [[CCDirector sharedDirector] pause];
+        CGSize s = [[CCDirector sharedDirector] winSize];
+        pauseLayer = [CCLayerColor layerWithColor: ccc4(150, 150, 150, 125) width: s.width height: s.height];
+        pauseLayer.position = CGPointZero;
+        [self addChild: pauseLayer z:8];
+        
+        _pauseScreen =[CCSprite spriteWithFile:PauseMenuBg];
+        _pauseScreen.position= ccp(250,150);
+        [self addChild:_pauseScreen z:8];
+        
+        CCMenuItem *ResumeMenuItem = [CCMenuItemImage
+                                      itemFromNormalImage:PauseResumeButton selectedImage:PauseResumeButton
+                                      target:self selector:@selector(ResumeButtonTapped:)];
+        ResumeMenuItem.position = ccp(250, 230);
+        
+        _pauseScreenMenu = [CCMenu menuWithItems:ResumeMenuItem, nil];
+        _pauseScreenMenu.position = ccp(0,0);
+        [self addChild:_pauseScreenMenu z:10];
+    }
+     
+}
+-(void)fireBomb{
+    
+    bombItem.visible=NO;
+    
+    [[SimpleAudioEngine sharedEngine] playEffect:BombSpraySound];
+    
+    // Set up initial location of projectile
+    CGSize winSize = [[CCDirector sharedDirector] winSize];
+    CCSprite *projectile = [CCSprite spriteWithFile:BombSprayImage
+                                               rect:CGRectMake(0, 0, 10, 320)];
+    projectile.position = ccp(20, winSize.height/2);
+    
+    // Ok to add now - we've double checked position
+    [self addChild:projectile];
+    
+    // Determine where we wish to shoot the projectile to
+    
+    CGPoint realDest = ccp(winSize.width, winSize.height/2);
+    
+    // Determine the length of how far we're shooting
+    float velocity = 480/1; // 480pixels/1sec
+    float realMoveDuration = 480/velocity;
+    
+    
+    
+    // Move projectile to actual endpoint
+    [projectile runAction:[CCSequence actions:
+                           [CCMoveTo actionWithDuration:realMoveDuration position:realDest],
+                           [CCCallFuncN actionWithTarget:self selector:@selector(spriteMoveFinished:)],
+                           nil]];
+    projectile.tag = 20;
+    [_projectiles addObject:projectile];
+
+}
+-(void)ResumeButtonTapped:(id)sender{
+    [self removeChild:_pauseScreen cleanup:YES];
+    [self removeChild:_pauseScreenMenu cleanup:YES];
+    [self removeChild:pauseLayer cleanup:YES];
+    [[CCDirector sharedDirector] resume];
+    _pauseScreenUp=FALSE;
 }
 
 // on "dealloc" you need to release all your retained objects
@@ -365,5 +508,11 @@
     _walkAction=nil;
     [_hud release];
     _hud=nil;
+    /*
+    [_movingSpring release];
+    [pauseLayer release];
+    [_pauseScreen release];
+    [_pauseScreenMenu release];
+     */
 }
 @end

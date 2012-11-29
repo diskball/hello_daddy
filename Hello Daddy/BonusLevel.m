@@ -18,6 +18,9 @@
 @synthesize walkAction = _walkAction;
 @synthesize hud = _hud;
 @synthesize lives = _lives;
+@synthesize pauseLayer;
+@synthesize _pauseScreen;
+@synthesize _pauseScreenMenu;
 +(CCScene *) scene
 {
 	// 'scene' is an autorelease object.
@@ -86,7 +89,7 @@
     starCounter++;
     if (starCounter==101) {
         [[SimpleAudioEngine sharedEngine] stopBackgroundMusic];
-        [[SimpleAudioEngine sharedEngine] playEffect:@"orgasm.mp3"];
+        [[SimpleAudioEngine sharedEngine] playEffect:LoadingEffect];
         [self performSelector:@selector(startLevel)
                    withObject:nil afterDelay:3.0f];
     }
@@ -102,7 +105,7 @@
     [self addPowerUp];
 }
 - (void)ccTouchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    [[SimpleAudioEngine sharedEngine] playEffect:@"scifi003.mp3"];
+    [[SimpleAudioEngine sharedEngine] playEffect:CondomFired];
     
     // Choose one of the touches to work with
     UITouch *touch = [touches anyObject];
@@ -111,7 +114,7 @@
     
     // Set up initial location of projectile
     CGSize winSize = [[CCDirector sharedDirector] winSize];
-    CCSprite *projectile = [CCSprite spriteWithFile:@"condom.png"
+    CCSprite *projectile = [CCSprite spriteWithFile:PlayerImage
                                                rect:CGRectMake(0, 0, 68, 20)];
     projectile.position = ccp(20, winSize.height/2);
     
@@ -150,17 +153,7 @@
 }
 
 
-- (void)finishShoot {
-    
-    // Ok to add now - we've finished rotation!
-    [self addChild:_nextProjectile];
-    [_projectiles addObject:_nextProjectile];
-    
-    // Release
-    [_nextProjectile release];
-    _nextProjectile = nil;
-    
-}
+
 - (void)update:(ccTime)dt {
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     [_hud numCollectedChanged:appDelegate.score];
@@ -188,7 +181,7 @@
                     if (monster.hp <= 0) {
                         
                         [targetsToDelete addObject:target];
-                        [[SimpleAudioEngine sharedEngine] playEffect:@"blast.mp3"];
+                        [[SimpleAudioEngine sharedEngine] playEffect:KillEffect];
                         appDelegate.score=appDelegate.score+monster.points;
                         [_hud numCollectedChanged:appDelegate.score];
                         NSLog(@"Monster points: %i",monster.points);
@@ -206,9 +199,9 @@
                                 appDelegate.lives++;
                                 [_lives livesChanged:appDelegate.lives];
                             }
-                            [[SimpleAudioEngine sharedEngine] playEffect:@"liveUpSound.mp3"];
+                            [[SimpleAudioEngine sharedEngine] playEffect:HeartEffect];
                         }else if ([powerUp.name isEqualToString:@"Star"]){
-                            [[SimpleAudioEngine sharedEngine] playEffect:@"starSound.mp3"];
+                            [[SimpleAudioEngine sharedEngine] playEffect:BonusEffect];
                         }
                         NSLog(@"Power Up collected");
                     }
@@ -222,7 +215,7 @@
             [_targets removeObject:target];
             [self removeChild:target cleanup:YES];
             _projectilesDestroyed++;
-            if (_projectilesDestroyed > 100) {
+            if (_projectilesDestroyed > LevelBonusKills) {
                 CCScene *level4Scene = [Level4Layer scene];
                 _projectilesDestroyed = 0;
                 [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration: 0.5 scene:level4Scene]];
@@ -249,10 +242,10 @@
 	// Apple recommends to re-assign "self" with the "super" return value
 	if( (self=[super initWithColor:ccc4(255,255,255,255)] )) {
         //preload music and sound effects
-        [[SimpleAudioEngine sharedEngine] preloadBackgroundMusic:@"flashsperm.mp3"];
-        [[SimpleAudioEngine sharedEngine] preloadEffect:@"scifi003.mp3"];
-        [[SimpleAudioEngine sharedEngine] preloadEffect:@"orgasm.mp3"];
-        [[SimpleAudioEngine sharedEngine] preloadEffect:@"starSound.mp3"];
+        [[SimpleAudioEngine sharedEngine] preloadBackgroundMusic:LevelBonusMusic];
+        [[SimpleAudioEngine sharedEngine] preloadEffect:CondomFired];
+        [[SimpleAudioEngine sharedEngine] preloadEffect:LoadingEffect];
+        [[SimpleAudioEngine sharedEngine] preloadEffect:BonusEffect];
 		// Enable touch events
 		self.isTouchEnabled = YES;
 		
@@ -260,22 +253,34 @@
 		_targets = [[NSMutableArray alloc] init];
 		_projectiles = [[NSMutableArray alloc] init];
         
-        //init bg picture
-		CCSprite* background = [CCSprite spriteWithFile:@"bg3.png"];
-        background.tag = 1;
-        background.anchorPoint = CGPointMake(0, 0);
-        [self addChild:background];
-        
+               
 		
         // Get the dimensions of the window for calculation purposes
 		CGSize winSize = [[CCDirector sharedDirector] winSize];
+        CCSprite* background;
+        if (winSize.width>1000) {
+            //init bg picture
+            background = [CCSprite spriteWithFile:LevelBonusBackgroundIphone5];
+            background.tag = 1;
+            background.anchorPoint = CGPointMake(0, 0);
+            [self addChild:background];
+            
+        }else{
+            //init bg picture
+            background = [CCSprite spriteWithFile:LevelBonusBackground];
+            background.tag = 1;
+            background.anchorPoint = CGPointMake(0, 0);
+            [self addChild:background];
+            
+        }
+
 		
 		// Add the player to the middle of the screen along the y-axis,
 		// and as close to the left side edge as we can get
 		// Remember that position is based on the anchor point, and by default the anchor
 		// point is the middle of the object.
         
-        _player = [[CCSprite spriteWithFile:@"condom.png"] retain];
+        _player = [[CCSprite spriteWithFile:PlayerImage] retain];
         _player.position = ccp(_player.contentSize.width/2, winSize.height/2);
         
         [self addChild:_player];
@@ -287,7 +292,7 @@
 		[self schedule:@selector(update:)];
 		
 		// Start up the background music
-		[[SimpleAudioEngine sharedEngine] playBackgroundMusic:@"flashsperm.mp3" loop:YES];
+		[[SimpleAudioEngine sharedEngine] playBackgroundMusic:LevelBonusMusic loop:YES];
         
         [self schedule:@selector(playOrgasm) interval:8.0f];
         
@@ -296,12 +301,57 @@
         [background runAction: [CCRepeatForever
                                           actionWithAction:wavesAction]];
         
+        //pause menu
+        _pauseScreenUp=FALSE;
+        CCMenuItem *pauseMenuItem = [CCMenuItemImage
+                                     itemFromNormalImage:PauseButton selectedImage:PauseButton
+                                     target:self selector:@selector(pauseGame) ];
+        
+        pauseMenuItem.position = ccp(16, 16);
+        
+        CCMenu *pauseMenu = [CCMenu menuWithItems:pauseMenuItem, nil];
+        pauseMenu.position = CGPointZero;
+        [self addChild:pauseMenu z:2];
         
 	}
 	return self;
 }
+-(void)pauseGame{
+    if(_pauseScreenUp ==FALSE)
+    {
+        _pauseScreenUp=TRUE;
+        //if you have music uncomment the line bellow
+        //[[SimpleAudioEngine sharedEngine] pauseBackgroundMusic];
+        [[CCDirector sharedDirector] pause];
+        CGSize s = [[CCDirector sharedDirector] winSize];
+        pauseLayer = [CCLayerColor layerWithColor: ccc4(150, 150, 150, 125) width: s.width height: s.height];
+        pauseLayer.position = CGPointZero;
+        [self addChild: pauseLayer z:8];
+        
+        _pauseScreen =[CCSprite spriteWithFile:PauseMenuBg];
+        _pauseScreen.position= ccp(250,150);
+        [self addChild:_pauseScreen z:8];
+        
+        CCMenuItem *ResumeMenuItem = [CCMenuItemImage
+                                      itemFromNormalImage:PauseResumeButton selectedImage:PauseResumeButton
+                                      target:self selector:@selector(ResumeButtonTapped:)];
+        ResumeMenuItem.position = ccp(250, 230);
+        
+        _pauseScreenMenu = [CCMenu menuWithItems:ResumeMenuItem, nil];
+        _pauseScreenMenu.position = ccp(0,0);
+        [self addChild:_pauseScreenMenu z:10];
+    }
+}
+-(void)ResumeButtonTapped:(id)sender{
+    [self removeChild:_pauseScreen cleanup:YES];
+    [self removeChild:_pauseScreenMenu cleanup:YES];
+    [self removeChild:pauseLayer cleanup:YES];
+    [[CCDirector sharedDirector] resume];
+    _pauseScreenUp=FALSE;
+}
+
 -(void)playOrgasm{
-    [[SimpleAudioEngine sharedEngine] playEffect:@"orgasm.mp3"];
+    [[SimpleAudioEngine sharedEngine] playEffect:LoadingEffect];
 }
 
 // on "dealloc" you need to release all your retained objects

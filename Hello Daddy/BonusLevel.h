@@ -9,7 +9,7 @@
 #import "cocos2d.h"
 #import "HudLayer.h"
 #import "LivesLayer.h"
-
+#import "Consts.h"
 @interface BonusLevel : CCLayerColor{
     NSMutableArray *_targets;
     NSMutableArray *_projectiles;
@@ -20,6 +20,12 @@
     HudLayer *_hud;
     LivesLayer *_lives;
     int starCounter;
+    //Pause Menu
+    //CCSprite *_movingSpring;
+    bool _pauseScreenUp;
+    CCLayer *pauseLayer;
+    CCSprite *_pauseScreen;
+    CCMenu *_pauseScreenMenu;
     
 }
 
@@ -28,4 +34,9 @@
 @property (nonatomic, retain) HudLayer *hud;
 @property (nonatomic, retain) LivesLayer *lives;
 @property (nonatomic, retain) CCAction *walkAction;
+//pause
+//@property (nonatomic, assign) CCSprite *_movingSpring;
+@property (nonatomic, assign) CCLayer *pauseLayer;
+@property (nonatomic, assign) CCSprite *_pauseScreen;
+@property (nonatomic, assign) CCMenu *_pauseScreenMenu;
 @end

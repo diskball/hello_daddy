@@ -10,6 +10,7 @@
 #import "cocos2d.h"
 #import "HudLayer.h"
 #import "LivesLayer.h"
+#import "Consts.h"
 // Lavel2Layer
 @interface Lavel2Layer : CCLayerColor
 {
@@ -22,6 +23,14 @@
     HudLayer *_hud;
     LivesLayer *_lives;
     
+    //Pause Menu
+    CCSprite *_movingSpring;
+    bool _pauseScreenUp;
+    CCLayer *pauseLayer;
+    CCSprite *_pauseScreen;
+    CCMenu *_pauseScreenMenu;
+    CCMenuItem *bombItem;
+    
 }
 
 // returns a CCScene that contains the Lavel2Layer as the only child
@@ -29,4 +38,11 @@
 @property (nonatomic, retain) HudLayer *hud;
 @property (nonatomic, retain) LivesLayer *lives;
 @property (nonatomic, retain) CCAction *walkAction;
+//pause
+@property (nonatomic, assign) CCSprite *_movingSpring;
+@property (nonatomic, assign) CCLayer *pauseLayer;
+@property (nonatomic, assign) CCSprite *_pauseScreen;
+@property (nonatomic, assign) CCMenu *_pauseScreenMenu;
+@property (nonatomic, assign) CCMenuItem *bombItem;
+
 @end

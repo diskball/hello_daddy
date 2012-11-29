@@ -10,6 +10,7 @@
 #import "cocos2d.h"
 #import "HudLayer.h"
 #import "LivesLayer.h"
+#import "Consts.h"
 // Level4Layer
 @interface Level4Layer : CCLayerColor
 {
@@ -23,6 +24,14 @@
     BOOL bossDead;
     HudLayer *_hud;
     LivesLayer *_lives;
+    
+    //Pause Menu
+    //CCSprite *_movingSpring;
+    bool _pauseScreenUp;
+    CCLayer *pauseLayer;
+    CCSprite *_pauseScreen;
+    CCMenu *_pauseScreenMenu;
+
 }
 
 // returns a CCScene that contains the HelloWorldLayer as the only child
@@ -30,4 +39,9 @@
 @property (nonatomic, retain) CCAction *walkAction;
 @property (nonatomic, retain) HudLayer *hud;
 @property (nonatomic, retain) LivesLayer *lives;
+//pause
+//@property (nonatomic, assign) CCSprite *_movingSpring;
+@property (nonatomic, assign) CCLayer *pauseLayer;
+@property (nonatomic, assign) CCSprite *_pauseScreen;
+@property (nonatomic, assign) CCMenu *_pauseScreenMenu;
 @end
