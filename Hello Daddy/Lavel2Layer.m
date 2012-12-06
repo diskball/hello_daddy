@@ -365,7 +365,7 @@
         // Get the dimensions of the window for calculation purposes
 		CGSize winSize = [[CCDirector sharedDirector] winSize];
         CCSprite* background;
-        if (winSize.width>1000) {
+        if (winSize.width==568) {
             //init bg picture
             if (appDelegate.secondTime) {
                 background = [CCSprite spriteWithFile:Level6BackgroundIphone5];

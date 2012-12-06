@@ -79,7 +79,7 @@
     if( (self=[super initWithColor:ccc4(255,255,255,255)] )) {
         CGSize winSize = [[CCDirector sharedDirector] winSize];
         [[SimpleAudioEngine sharedEngine] playBackgroundMusic:YouLoseEffect loop:YES];
-        if (winSize.width>1000) {
+        if (winSize.width==568) {
             //init bg picture
             CCSprite* background = [CCSprite spriteWithFile:GameOverBackgroundIphone5];
             background.tag = 1;
@@ -99,6 +99,7 @@
         _label.color = ccc3(255,255,255);
         _label.position = ccp(winSize.width/2, winSize.height/2);
         [self addChild:_label];
+        
         
         /*
         [self runAction:[CCSequence actions:

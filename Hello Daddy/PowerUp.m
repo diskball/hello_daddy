@@ -7,6 +7,7 @@
 //
 
 #import "PowerUp.h"
+#import "Consts.h"
 
 @implementation PowerUp
 
@@ -23,7 +24,7 @@
 + (id)heart {
     
     HeartPowerUp *heart = nil;
-    if ((heart = [[[super alloc] initWithFile:@"heart.png"] autorelease])) {
+    if ((heart = [[[super alloc] initWithFile:HeartPowerUpImage] autorelease])) {
         heart.hp = 1;
         heart.name = @"Heart";
         heart.minMoveDuration = 6;
@@ -41,7 +42,7 @@
 + (id)star {
     
     StarPowerUp *star = nil;
-    if ((star = [[[super alloc] initWithFile:@"star.png"] autorelease])) {
+    if ((star = [[[super alloc] initWithFile:StarPowerUpImage] autorelease])) {
         star.hp = 1;
         star.name = @"Star";
         star.minMoveDuration = 6;

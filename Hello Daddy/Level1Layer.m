@@ -26,6 +26,7 @@
 @synthesize _pauseScreen;
 @synthesize _pauseScreenMenu;
 @synthesize bombItem;
+
 +(CCScene *) scene
 {
 	// 'scene' is an autorelease object.
@@ -439,6 +440,7 @@
         _pauseScreen =[CCSprite spriteWithFile:PauseMenuBg];
         _pauseScreen.position= ccp(250,150);
         [self addChild:_pauseScreen z:8];
+    
         
         CCMenuItem *ResumeMenuItem = [CCMenuItemImage
                                       itemFromNormalImage:PauseResumeButton selectedImage:PauseResumeButton

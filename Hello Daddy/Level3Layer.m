@@ -82,7 +82,7 @@
         powerUp = [HeartPowerUp heart];
     }else{
         int random=(arc4random() % 10);
-        if ( random == 0 || random == 5) {
+        if ( random == 0) {
             powerUp = [HeartPowerUp heart];
         }else{
             powerUp = [StarPowerUp star];
@@ -118,7 +118,7 @@
 }
 
 -(void)addTarget {
-
+ AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     Monster *target = nil;
     if ((arc4random() % 2) == 0) {
         if ((arc4random() % 2) == 0) {
@@ -139,8 +139,14 @@
             
             target = [WeakAndFastMonster monster];
             //making targets a little quicker
-            target.minMoveDuration=5;
-            target.maxMoveDuration=11;
+            if (appDelegate.secondTime) {
+                target.minMoveDuration=5;
+                target.maxMoveDuration=7;
+            }else{
+                target.minMoveDuration=5;
+                target.maxMoveDuration=11;
+            }
+            
             
             self.walkAction = [CCRepeatForever actionWithAction:
                                [CCAnimate actionWithAnimation:walkAnim restoreOriginalFrame:NO]];
@@ -163,8 +169,14 @@
             
             target = [StrongAndSlowMonster monster];
             //making targets a little quicker
-            target.minMoveDuration=7;
-            target.maxMoveDuration=13;
+            if (appDelegate.secondTime) {
+                target.minMoveDuration=7;
+                target.maxMoveDuration=9;
+            }else{
+                target.minMoveDuration=7;
+                target.maxMoveDuration=13;
+            }
+            
             
             self.walkAction = [CCRepeatForever actionWithAction:
                                [CCAnimate actionWithAnimation:walkAnim restoreOriginalFrame:NO]];
@@ -188,6 +200,11 @@
         CCAnimation *walkAnim = [CCAnimation
                                  animationWithFrames:walkAnimFrames delay:1.5f];
         target = [Virus1 monster];
+        
+        if (appDelegate.secondTime) {
+            target.minMoveDuration=8;
+            target.maxMoveDuration=11;
+        }
         
         self.walkAction = [CCRepeatForever actionWithAction:
                            [CCAnimate actionWithAnimation:walkAnim restoreOriginalFrame:NO]];
@@ -401,7 +418,7 @@
         // Get the dimensions of the window for calculation purposes
 		CGSize winSize = [[CCDirector sharedDirector] winSize];
         CCSprite* background;
-        if (winSize.width>1000) {
+        if (winSize.width==568) {
             //init bg picture
             if (appDelegate.secondTime) {
                 background = [CCSprite spriteWithFile:Level7BackgroundIphone5];
@@ -415,9 +432,9 @@
         }else{
             //init bg picture
             if (appDelegate.secondTime) {
-                background = [CCSprite spriteWithFile:Level7BackgroundIphone5];
+                background = [CCSprite spriteWithFile:Level7Background];
             }else{
-                background = [CCSprite spriteWithFile:Level3BackgroundIphone5];
+                background = [CCSprite spriteWithFile:Level3Background];
             }
             background.tag = 1;
             background.anchorPoint = CGPointMake(0, 0);
@@ -438,13 +455,13 @@
 		if (appDelegate.secondTime) {
             // Call game logic about every second
             [self schedule:@selector(gameLogic:) interval:0.8];
-            [self schedule:@selector(addPowerUp) interval:3.0];
+            [self schedule:@selector(addPowerUp) interval:8.0];
             // Start up the background music
             [[SimpleAudioEngine sharedEngine] playBackgroundMusic:Level3MusicSec loop:YES];
         }else{
             // Call game logic about every second
             [self schedule:@selector(gameLogic:) interval:1.0];
-            [self schedule:@selector(addPowerUp) interval:5.0];
+            [self schedule:@selector(addPowerUp) interval:10.0];
             // Start up the background music
             [[SimpleAudioEngine sharedEngine] playBackgroundMusic:Level3Music loop:YES];
         }

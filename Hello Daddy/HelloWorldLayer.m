@@ -48,7 +48,7 @@
         
         CGSize winSize = [[CCDirector sharedDirector] winSize];
         
-        if (winSize.width>1000) {
+        if (winSize.width==568) {
             //init bg picture
             CCSprite* background = [CCSprite spriteWithFile:MenuBackgroundIphone5];
             background.tag = 1;

@@ -14,7 +14,7 @@
 #define LevelBonusKills    100
 
 //define BG Music for Levels
-#define Level1Music        @"peter_gunn.mp3"
+#define Level1Music        @"in_n_out.mp3"
 #define Level2Music        @"flashsperm.mp3"
 #define Level3Music        @"1984.mp3"
 #define Level4Music        @"boss.mp3"
@@ -38,10 +38,10 @@
 //define Background Images
 #define MenuBackground                  @"menu320.png"
 #define MenuBackgroundIphone5           @"menu1136.png"
-#define HighscoresBackgroundIphone5     @"pausemenu_angie.png"
+#define HighscoresBackgroundIphone5     @"pausemenu_angie5.png"
 #define HighscoresBackground            @"pausemenu_angie.png"
-#define GameOverBackground              @"pausemenu_angie.png"
-#define GameOverBackgroundIphone5       @"pausemenu_angie.png"
+#define GameOverBackground              @"gameover.png"
+#define GameOverBackgroundIphone5       @"gameover5.png"
 #define PauseMenuBackground             @"pausemenu_small.png"
 #define PauseMenuBackgroundIphone5      @""
 #define Level1Background                @"forest_1.png"                     //"bg2.png"
@@ -86,6 +86,9 @@
 #define EnemyBossDefault    @"big_boss.png"
 #define EnemyBossPlist     @"big_boss.plist"
 #define EnemyBossFrames    @"boss%d.png"
+
+#define StarPowerUpImage    @"star.png"
+#define HeartPowerUpImage    @"heart.png"
 
 //define Messages
 #define WinMessage          @"Thank God this is not your baby! \nMore levels cumming soon \nScore: %i"

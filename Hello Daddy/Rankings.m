@@ -94,11 +94,22 @@
         self.isTouchEnabled = YES;
         
         CGSize winSize = [[CCDirector sharedDirector] winSize];
+        if (winSize.width==568) {
+            //init bg picture
+            CCSprite* background = [CCSprite spriteWithFile:HighscoresBackgroundIphone5];
+            background.tag = 1;
+            background.anchorPoint = CGPointMake(0, 0);
+            [self addChild:background];
+            
+        }else{
+            //init bg picture
+            CCSprite* background = [CCSprite spriteWithFile:HighscoresBackground];
+            background.tag = 1;
+            background.anchorPoint = CGPointMake(0, 0);
+            [self addChild:background];
+        }
+
         
-        CCSprite* background = [CCSprite spriteWithFile:HighscoresBackground];
-        background.tag = 1;
-        background.anchorPoint = CGPointMake(0, 0);
-        [self addChild:background];
         
         
         NSString *ranks =[[NSString alloc] initWithString:[self displayQueryResults]];

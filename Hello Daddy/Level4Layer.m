@@ -79,8 +79,13 @@
 -(void)addPowerUp{
     PowerUp *powerUp = nil;
     
-    powerUp = [HeartPowerUp heart];
-    
+    int random=(arc4random() % 10);
+    if ( random == 0 || random == 5) {
+        powerUp = [HeartPowerUp heart];
+    }else{
+        powerUp = [StarPowerUp star];
+    }
+
     // Determine where to spawn the target along the Y axis
     CGSize winSize = [[CCDirector sharedDirector] winSize];
     int minY = powerUp.contentSize.height/2;
@@ -171,7 +176,7 @@
     [_targets addObject:boss];
 }
 -(void)addTarget {
-    
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     Monster *target = nil;
     if ((arc4random() % 2) == 0) {
         [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:
@@ -191,8 +196,13 @@
         
         target = [StrongAndSlowMonster monster];
         //making targets a little quicker
-        target.minMoveDuration=8;
-        target.maxMoveDuration=10;
+        if (appDelegate.secondTime) {
+            target.minMoveDuration=6;
+            target.maxMoveDuration=8;
+        }else{
+            target.minMoveDuration=8;
+            target.maxMoveDuration=10;
+        }
         
         self.walkAction = [CCRepeatForever actionWithAction:
                            [CCAnimate actionWithAnimation:walkAnim restoreOriginalFrame:NO]];
@@ -216,8 +226,14 @@
         
         target = [WeakAndFastMonster monster];
         //making targets a little quicker
-        target.minMoveDuration=10;
-        target.maxMoveDuration=13;
+        if (appDelegate.secondTime) {
+            target.minMoveDuration=4;
+            target.maxMoveDuration=7;
+        }else{
+            target.minMoveDuration=9;
+            target.maxMoveDuration=10;
+        }
+
         
         self.walkAction = [CCRepeatForever actionWithAction:
                            [CCAnimate actionWithAnimation:walkAnim restoreOriginalFrame:NO]];
@@ -478,13 +494,13 @@
 		if (appDelegate.secondTime) {
             // Call game logic about every second
             [self schedule:@selector(gameLogic:) interval:0.5];
-            [self schedule:@selector(addPowerUp) interval:3.0];
+            [self schedule:@selector(addPowerUp) interval:5.0];
             // Start up the background music
             [[SimpleAudioEngine sharedEngine] playBackgroundMusic:Level4MusicSec loop:YES];
         }else{
             // Call game logic about every second
             [self schedule:@selector(gameLogic:) interval:1.0];
-            [self schedule:@selector(addPowerUp) interval:3.0];
+            [self schedule:@selector(addPowerUp) interval:10.0];
             // Start up the background music
             [[SimpleAudioEngine sharedEngine] playBackgroundMusic:Level4Music loop:YES];
         }
