@@ -63,12 +63,14 @@
     // don't forget to call "super dealloc"
 	[super dealloc];
     
-    [self.lives release];
+    /*
+     [self.lives release];
      [self.tex1 release];
      [self.tex2 release];
      [self.tex3 release];
      [self.tex4 release];
      [self.tex5 release];
+     */
     
 }
 

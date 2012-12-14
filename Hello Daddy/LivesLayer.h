@@ -17,13 +17,13 @@
     CCTexture2D *tex5;
 }
 
-@property (nonatomic,retain) CCSprite *lives;
+@property (nonatomic,assign) CCSprite *lives;
 
-@property (nonatomic,retain) CCTexture2D *tex1;
-@property (nonatomic,retain) CCTexture2D *tex2;
-@property (nonatomic,retain) CCTexture2D *tex3;
-@property (nonatomic,retain) CCTexture2D *tex4;
-@property (nonatomic,retain) CCTexture2D *tex5;
+@property (nonatomic,assign) CCTexture2D *tex1;
+@property (nonatomic,assign) CCTexture2D *tex2;
+@property (nonatomic,assign) CCTexture2D *tex3;
+@property (nonatomic,assign) CCTexture2D *tex4;
+@property (nonatomic,assign) CCTexture2D *tex5;
 
 
 - (void)livesChanged:(int)livesRemaining;
