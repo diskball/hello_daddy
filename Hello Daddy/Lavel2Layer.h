@@ -37,7 +37,7 @@
 // returns a CCScene that contains the Lavel2Layer as the only child
 +(CCScene *) scene;
 @property (nonatomic, retain) HudLayer *hud;
-@property (nonatomic, retain) LivesLayer *lives;
+@property (nonatomic, assign) LivesLayer *lives;
 @property (nonatomic, retain) CCAction *walkAction;
 //pause
 @property (nonatomic, assign) CCSprite *_movingSpring;

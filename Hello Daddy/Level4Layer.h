@@ -38,7 +38,7 @@
 +(CCScene *) scene;
 @property (nonatomic, retain) CCAction *walkAction;
 @property (nonatomic, retain) HudLayer *hud;
-@property (nonatomic, retain) LivesLayer *lives;
+@property (nonatomic, assign) LivesLayer *lives;
 //pause
 //@property (nonatomic, assign) CCSprite *_movingSpring;
 @property (nonatomic, assign) CCLayer *pauseLayer;

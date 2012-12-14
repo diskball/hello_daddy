@@ -524,7 +524,6 @@
     _walkAction=nil;
     [_hud release];
     _hud=nil;
-    
 	
 }
 @end
