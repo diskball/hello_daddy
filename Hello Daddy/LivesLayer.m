@@ -23,7 +23,7 @@
     if ((self = [super init])) {
         //init bg picture
         AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-        [[SimpleAudioEngine sharedEngine] preloadEffect:@"scream.wav"];
+        [[SimpleAudioEngine sharedEngine] preloadEffect:@"lifelost.mp3"];
         self.tex1 = [[CCTextureCache sharedTextureCache] addImage:@"1lives.png"];
         self.tex2 = [[CCTextureCache sharedTextureCache] addImage:@"2lives.png"];
         self.tex3 = [[CCTextureCache sharedTextureCache] addImage:@"3lives.png"];
@@ -43,7 +43,7 @@
 
 - (void)livesChanged:(int)livesRemaining{
     if (livesRemaining < 5) {
-        [[SimpleAudioEngine sharedEngine] playEffect:@"scream.wav"];
+        [[SimpleAudioEngine sharedEngine] playEffect:@"lifelost.mp3"];
     }
     if (livesRemaining >= 5) {
         self.lives.texture=self.tex5;
