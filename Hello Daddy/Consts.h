@@ -30,7 +30,7 @@
 #define HeartEffect        @"liveUpSound.mp3"
 #define LifeLostEffect     @"peter_gunn.mp3"
 #define CondomFired        @"scifi003.mp3"
-#define LoadingEffect      @"orgasm.mp3"
+#define LoadingEffect      @"woo-hoo.mp3"
 #define BonusEffect        @"starSound.mp3"
 #define YouLoseEffect      @"babyCry.mp3"
 #define BossDeadEffect     @"bossDead.mp3"
@@ -91,8 +91,8 @@
 #define HeartPowerUpImage    @"heart.png"
 
 //define Messages
-#define WinMessage          @"Thank God this is not your baby! \nMore levels cumming soon \nScore: %i"
-#define LoseMessage         @"Hello Daddy...!!! \nShake your iphone to make it sleep. \nScore: %i"
+#define WinMessage          @"This is not your baby! \nRemember to always practice safe sex \nMore levels coming soon \nScore: %i"
+#define LoseMessage         @"Hello Daddy...!!! \nWhy don't you cradle it a little bit? \nRemember Safe Sex is always \na good idea! \nScore: %i"
 
 //define Menu Images
 #define PauseButton         @"Settings.png"
