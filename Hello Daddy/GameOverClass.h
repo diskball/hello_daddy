@@ -8,13 +8,16 @@
 
 #import "cocos2d.h"
 #import "Consts.h"
+
 @interface GameOverLayer : CCLayerColor  {
     CCLabelTTF *_label;
     NSManagedObjectContext *managedObjectContext;
     BOOL shake_once;
     float THRESHOLD;
     BOOL win;
+    UIViewController *viewController;
 }
+@property (nonatomic, retain) UIViewController *viewController;
 @property (nonatomic, retain) CCLabelTTF *label;
 @property (nonatomic, assign) BOOL win;
 // My addition
