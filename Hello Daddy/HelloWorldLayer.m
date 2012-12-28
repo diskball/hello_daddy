@@ -110,7 +110,7 @@
     [[SimpleAudioEngine sharedEngine] stopBackgroundMusic];
     [[SimpleAudioEngine sharedEngine] playEffect:LoadingEffect];
     [self performSelector:@selector(startLevel)
-               withObject:nil afterDelay:3.0f];
+               withObject:nil afterDelay:1.0f];
     appDelegate.lives=5;
 }
 -(void)startLevel{
