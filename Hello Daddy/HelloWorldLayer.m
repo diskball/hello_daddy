@@ -55,7 +55,15 @@
             background.anchorPoint = CGPointMake(0, 0);
             [self addChild:background];
             
-        }else{
+        }else if (winSize.width==1024) {
+            //init bg picture
+            CCSprite* background = [CCSprite spriteWithFile:MenuBackgroundIpad];
+            background.tag = 1;
+            background.anchorPoint = CGPointMake(0, 0);
+            [self addChild:background];
+            
+        }
+        else{
             //init bg picture
             CCSprite* background = [CCSprite spriteWithFile:MenuBackground];
             background.tag = 1;

@@ -90,19 +90,34 @@
             background.tag = 1;
             background.anchorPoint = CGPointMake(0, 0);
             [self addChild:background];
+            self.label = [CCLabelTTF labelWithString:@"" dimensions:CGSizeMake(winSize.height, winSize.width/2) alignment:UITextAlignmentCenter fontName:@"Aka-AcidGR-Safe" fontSize:30 ];
+            _label.color = ccc3(255,255,255);
+            _label.position = ccp((winSize.width/2)-80, (winSize.height/2)+20);
             
-        }else{
+        }else if (winSize.width==1024) {
+            //init bg picture
+            CCSprite* background = [CCSprite spriteWithFile:GameOverBackgroundIpad];
+            background.tag = 1;
+            background.anchorPoint = CGPointMake(0, 0);
+            [self addChild:background];
+            self.label = [CCLabelTTF labelWithString:@"" dimensions:CGSizeMake(winSize.height, winSize.width/2) alignment:UITextAlignmentCenter fontName:@"Aka-AcidGR-Safe" fontSize:40 ];
+            _label.color = ccc3(255,255,255);
+            _label.position = ccp((winSize.width/2)-80, (winSize.height/2)+40);
+        }
+        else{
             //init bg picture
             CCSprite* background = [CCSprite spriteWithFile:GameOverBackground];
             background.tag = 1;
             background.anchorPoint = CGPointMake(0, 0);
             [self addChild:background];
+            self.label = [CCLabelTTF labelWithString:@"" dimensions:CGSizeMake(winSize.height, winSize.width/2) alignment:UITextAlignmentCenter fontName:@"Aka-AcidGR-Safe" fontSize:30 ];
+            _label.color = ccc3(255,255,255);
+            _label.position = ccp((winSize.width/2)-80, (winSize.height/2)+40);
             
         }
 
-        self.label = [CCLabelTTF labelWithString:@"" dimensions:CGSizeMake(winSize.height, winSize.width/2) alignment:UITextAlignmentCenter fontName:@"Arial" fontSize:30 ];
-        _label.color = ccc3(255,255,255);
-        _label.position = ccp(winSize.width/2, winSize.height/2);
+        
+        
         [self addChild:_label];
         
         
@@ -138,8 +153,7 @@
         THRESHOLD = 500;
         self.isAccelerometerEnabled = NO;
         
-        [self performSelector:@selector(getNewName)
-                   withObject:nil afterDelay:2.0f];
+        //[self performSelector:@selector(getNewName) withObject:nil afterDelay:2.0f];
         
         
         
@@ -188,6 +202,7 @@
             NSString *newName = [[alertView textFieldAtIndex:0] text];
             NSLog(@"NAME: %@",newName);
             [self insertDataIntoCoreDataDatabase:newName andScore:[NSNumber numberWithInt:appDelegate.score]];
+            
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You did great!"
                                                             message:@"Share Your Score on Facebook?"
                                                            delegate:self
@@ -228,6 +243,7 @@
     
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     appDelegate.score=0;
+    appDelegate.superShot=FALSE;
     [[CCDirector sharedDirector] replaceScene:[HelloWorldLayer scene]];
     
 }
@@ -257,12 +273,12 @@
         controller.completionHandler =myBlock;
         
         //Adding the Text to the facebook post value from iOS
-        NSString* text=[NSString stringWithFormat:@"Just scored :%i on Hello Daddy Game!",appDelegate.score];
+        NSString* text=[NSString stringWithFormat:FacebookShare,appDelegate.score];
         [controller setInitialText:text];
         
         //Adding the URL to the facebook post value from iOS
         
-        [controller addURL:[NSURL URLWithString:@"https://itunes.apple.com/us/app/hello-daddy/id587326956?mt=8&ign-mpt=uo%3D2"]];
+        [controller addURL:[NSURL URLWithString:@"https://itunes.apple.com/app/hello-daddy/id587326956?mt=8&ign-mpt=uo%3D2"]];
         
         //Adding the Image to the facebook post value from iOS
         

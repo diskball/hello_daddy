@@ -101,6 +101,13 @@
             background.anchorPoint = CGPointMake(0, 0);
             [self addChild:background];
             
+        }if (winSize.width==1024) {
+            //init bg picture
+            CCSprite* background = [CCSprite spriteWithFile:HighscoresBackgroundIpad];
+            background.tag = 1;
+            background.anchorPoint = CGPointMake(0, 0);
+            [self addChild:background];
+            
         }else{
             //init bg picture
             CCSprite* background = [CCSprite spriteWithFile:HighscoresBackground];
@@ -113,6 +120,45 @@
         
         
         NSString *ranks =[[NSString alloc] initWithString:[self displayQueryResults]];
+        if (winSize.width==1024) {
+            // Opening Text
+            //CCLabel *myLabel = [CCLabel labelWithString:@"Some Text" fontName:@"Action Man" fontSize:18];
+            self.label = [CCLabelTTF labelWithString:ranks dimensions:CGSizeMake(500, 550) alignment:UITextAlignmentCenter fontName:@"Aka-AcidGR-Safe" fontSize:32];
+            _label.color = ccc3(255,255,255);
+            _label.position = ccp(winSize.width/2, 390);
+            [self addChild:_label];
+            
+            [ranks release];
+            // Standard method to create a button
+            CCMenuItem *back = [CCMenuItemImage
+                                itemFromNormalImage:MainMenuBackButton selectedImage:MainMenuBackButton
+                                target:self selector:@selector(returnToMenu) ];
+            
+            back.position = ccp(winSize.width/2, 720);
+            
+            CCMenu *levelMenu = [CCMenu menuWithItems:back, nil];
+            levelMenu.position = CGPointZero;
+            [self addChild:levelMenu];
+        }else{
+            // Opening Text
+            self.label = [CCLabelTTF labelWithString:ranks dimensions:CGSizeMake(200, 250) alignment:UITextAlignmentCenter fontName:@"Aka-AcidGR-Safe" fontSize:20];
+            _label.color = ccc3(255,255,255);
+            _label.position = ccp(winSize.width/2, 130);
+            [self addChild:_label];
+            
+            [ranks release];
+            // Standard method to create a button
+            CCMenuItem *back = [CCMenuItemImage
+                                itemFromNormalImage:MainMenuBackButton selectedImage:MainMenuBackButton
+                                target:self selector:@selector(returnToMenu) ];
+            
+            back.position = ccp(winSize.width/2, 290);
+            
+            CCMenu *levelMenu = [CCMenu menuWithItems:back, nil];
+            levelMenu.position = CGPointZero;
+            [self addChild:levelMenu];
+        }
+        /*
         // Opening Text
         self.label = [CCLabelTTF labelWithString:ranks dimensions:CGSizeMake(200, 250) alignment:UITextAlignmentCenter fontName:@"Arial" fontSize:20];
         _label.color = ccc3(255,255,255);
@@ -130,6 +176,7 @@
         CCMenu *levelMenu = [CCMenu menuWithItems:back, nil];
         levelMenu.position = CGPointZero;
         [self addChild:levelMenu];
+         */
         
     }
     return self;
