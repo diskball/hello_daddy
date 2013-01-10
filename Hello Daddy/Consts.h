@@ -38,37 +38,51 @@
 //define Background Images
 #define MenuBackground                  @"menu320.png"
 #define MenuBackgroundIphone5           @"menu1136.png"
+#define MenuBackgroundIpad              @"menu1024.png"
 #define HighscoresBackgroundIphone5     @"pausemenu_angie5.png"
 #define HighscoresBackground            @"pausemenu_angie.png"
-#define GameOverBackground              @"gameover.png"
-#define GameOverBackgroundIphone5       @"gameover5.png"
-#define PauseMenuBackground             @"pausemenu_small.png"
-#define PauseMenuBackgroundIphone5      @""
+#define HighscoresBackgroundIpad        @"pausemenu_angieiPad.png"
+#define GameOverBackground              @"gameover480x320.png"
+#define GameOverBackgroundIphone5       @"gameover568x320.png"
+#define GameOverBackgroundIpad          @"gameover1024x768.png"
+#define PauseMenuBackground             @"pause480x320.png"
+#define PauseMenuBackgroundIphone5      @"pause568x320.png"
+#define PauseMenuBackgroundIpad         @"pausemenu2.png"
 #define Level1Background                @"forest_1.png"                     //"bg2.png"
 #define Level1BackgroundIphone5         @"forest_2.png"                     //"bg2.png"
+#define Level1BackgroundIpad            @"forest1024.png"
 #define Level2Background                @"city_1.png"                       //"bg3.png"
 #define Level2BackgroundIphone5         @"city_2.png"                       //"bg3.png"
+#define Level2BackgroundIpad            @"cityscape1024.png"                       //"bg3.png"
 #define Level3Background                @"desert_1.png"                     //"bg4.png"
 #define Level3BackgroundIphone5         @"desert_2.png"                     //"bg4.png"
+#define Level3BackgroundIpad            @"desert1024.png"                     //"bg4.png"
 #define Level4Background                @"beach_1.png"                      //"bg5.png"
 #define Level4BackgroundIphone5         @"beach_2.png"                      //"bg5.png"
+#define Level4BackgroundIpad            @"beach1024.png"                      //"bg5.png"
 #define Level5Background                @"africa_1.png"                     //"bg2.png"
 #define Level5BackgroundIphone5         @"africa_2.png"                     //"bg2.png"
+#define Level5BackgroundIpad            @"africa1024.png"                     //"bg2.png"
 #define Level6Background                @"bedroom_1.png"                    //"bg3.png"
 #define Level6BackgroundIphone5         @"bedroom_2.png"                    //"bg3.png"
+#define Level6BackgroundIpad            @"bedroom1024.png"                    //"bg3.png"
 #define Level7Background                @"cloud_city_1.png"                 //"bg4.png"
 #define Level7BackgroundIphone5         @"cloud_city_2.png"                 //"bg4.png"
+#define Level7BackgroundIpad            @"cloudcity1024.png"                 //"bg4.png"
 #define Level8Background                @"livingroom_1.png"                 //"bg5.png"
 #define Level8BackgroundIphone5         @"livingroom_2.png"                 //"bg5.png"
+#define Level8BackgroundIpad            @"livingroom1024.png"                 //"bg5.png"
 #define LevelBonusBackground            @"bg3.png"
 #define LevelBonusBackgroundIphone5     @"bg3_ipad.png"
 
 //define player image
-#define PlayerImage      @"condom.png"
+#define PlayerImage         @"condom.png"
+#define PlayerImageIpad     @"condom_ipad.png"
 
 //define bomb items
-#define BombSprayImage   @"spray.png"
-#define BombSpraySound   @"scifi003.mp3"
+#define BombSprayImage          @"spray100x320.png"
+#define BombSprayImageIpad      @"spray2.png"
+#define BombSpraySound          @"scifi003.mp3"
 
 //define enemy images
 #define EnemySpermDefault   @"sperm_default.png"      
@@ -87,12 +101,15 @@
 #define EnemyBossPlist     @"big_boss.plist"
 #define EnemyBossFrames    @"boss%d.png"
 
-#define StarPowerUpImage    @"star.png"
-#define HeartPowerUpImage    @"heart.png"
+#define StarPowerUpImage        @"star.png"
+#define SuperShotPowerUpImage   @"condom2.png"
+#define HeartPowerUpImage       @"heart.png"
 
 //define Messages
-#define WinMessage          @"This is not your baby! \nRemember to always practice safe sex \nMore levels coming soon \nScore: %i"
-#define LoseMessage         @"Hello Daddy...!!! \nWhy don't you cradle it a little bit? \nRemember Safe Sex is always \na good idea! \nScore: %i"
+#define WinMessage          @"Yupi!Not your baby,but remember\n Always Safe Sex!!! \nMore levels coming soon \nScore: %i"
+#define LoseMessage         @"Hello Daddy...!!! \nYour baby is crying...\nWhy don't you cradle it a little bit? \nScore: %i"
+
+#define FacebookShare       @"Just played Hello Daddy for iOS\n and Scored: %i Points \n Can You beat it? \n Download link below! \n"
 
 //define Menu Images
 #define PauseButton         @"Settings.png"

@@ -33,6 +33,11 @@
 @interface StarPowerUp : PowerUp {
 }
 +(id)star;
+@end
+
+@interface SuperShot : PowerUp {
+}
++(id)SuperShot;
 
 @end
 

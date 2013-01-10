@@ -54,3 +54,20 @@
 }
 
 @end
+@implementation SuperShot
+
++ (id)SuperShot {
+    
+    SuperShot *superShot = nil;
+    if ((superShot = [[[super alloc] initWithFile:SuperShotPowerUpImage] autorelease])) {
+        superShot.hp = 1;
+        superShot.name = @"superShot";
+        superShot.minMoveDuration = 6;
+        superShot.maxMoveDuration = 8;
+        superShot.points=300;
+    }
+    return superShot;
+    
+}
+
+@end
