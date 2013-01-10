@@ -29,7 +29,8 @@
     CCLayer *pauseLayer;
     CCSprite *_pauseScreen;
     CCMenu *_pauseScreenMenu;
-     CCMenuItem *bombItem;
+    CCMenuItem *bombItem;
+    CCMenuItem *superShotItem;
 }
 
 // returns a CCScene that contains the HelloWorldLayer as the only child
@@ -43,4 +44,5 @@
 @property (nonatomic, assign) CCSprite *_pauseScreen;
 @property (nonatomic, assign) CCMenu *_pauseScreenMenu;
 @property (nonatomic, assign) CCMenuItem *bombItem;
+@property (nonatomic, assign) CCMenuItem *superShotItem;
 @end

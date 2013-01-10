@@ -26,6 +26,7 @@
 @synthesize _pauseScreen;
 @synthesize _pauseScreenMenu;
 @synthesize bombItem;
+@synthesize superShotItem;
 
 +(CCScene *) scene
 {
@@ -74,7 +75,38 @@
         [_projectiles removeObject:sprite];
     }
 }
-
+-(void)addPowerUpSuper{
+    PowerUp *powerUp = nil;
+    
+    powerUp = [SuperShot SuperShot];
+    
+    // Determine where to spawn the target along the Y axis
+    CGSize winSize = [[CCDirector sharedDirector] winSize];
+    int minY = powerUp.contentSize.height/2;
+    int maxY = winSize.height - powerUp.contentSize.height/2;
+    int rangeY = maxY - minY;
+    int actualY = (arc4random() % rangeY) + minY;
+    
+    // Create the target slightly off-screen along the right edge,
+    // and along a random position along the Y axis as calculated above
+    powerUp.position = ccp(winSize.width + (powerUp.contentSize.width/2), actualY);
+    [self addChild:powerUp];
+    
+    // Determine speed of the target
+    int minDuration = powerUp.minMoveDuration; //2.0;
+    int maxDuration = powerUp.maxMoveDuration; //4.0;
+    int rangeDuration = maxDuration - minDuration;
+    int actualDuration = (arc4random() % rangeDuration) + minDuration;
+    
+    // Create the actions
+    id actionMove = [CCMoveTo actionWithDuration:actualDuration
+                                        position:ccp(-powerUp.contentSize.width/2, actualY)];
+    id actionMoveDone = [CCCallFuncN actionWithTarget:self
+                                             selector:@selector(spriteMoveFinished:)];
+    [powerUp runAction:[CCSequence actions:actionMove, actionMoveDone, nil]];
+    powerUp.tag = 10;
+    [_targets addObject:powerUp];
+}
 -(void)addPowerUp{
     PowerUp *powerUp = nil;
     
@@ -173,6 +205,150 @@
 -(void)gameLogic:(ccTime)dt {
     [self addTarget];
 }
+-(void)ccTouchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    if (appDelegate.superShot) {
+        UITouch *touch = [touches anyObject];
+        [self performSelector:@selector(longTap:) withObject:touch afterDelay:0.8];
+    }
+}
+-(void) longTap:(UITouch *)touch
+{
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    [[SimpleAudioEngine sharedEngine] playEffect:CondomFired];
+    [[SimpleAudioEngine sharedEngine] playEffect:CondomFired];
+    int i=0;
+    float spray=0.0;
+    CGSize winSize = [[CCDirector sharedDirector] winSize];
+    if (winSize.width==1024) {
+        while (i<20) {
+            // Choose one of the touches to work with
+            CGPoint location = [touch locationInView:[touch view]];
+            location.x=spray;
+            NSLog(@"%f", location.x);
+            location = [[CCDirector sharedDirector] convertToGL:location];
+            
+            // Set up initial location of projectile
+            CGSize winSize = [[CCDirector sharedDirector] winSize];
+            CCSprite *projectile;
+            if (winSize.width==1024) {
+                projectile = [CCSprite spriteWithFile:PlayerImageIpad
+                                                 rect:CGRectMake(0, 0, 70, 48)];
+            }else{
+                projectile = [CCSprite spriteWithFile:PlayerImage
+                                                 rect:CGRectMake(0, 0, 68, 20)];
+            }
+            
+            projectile.position = ccp(20, winSize.height/2);
+            
+            // Determine offset of location to projectile
+            int offX = location.x - projectile.position.x;
+            int offY = location.y - projectile.position.y;
+            
+            // Bail out if we are shooting down or backwards
+            if (offX <= 0) return;
+            
+            // Ok to add now - we've double checked position
+            [self addChild:projectile];
+            
+            // Determine where we wish to shoot the projectile to
+            int realX = winSize.width + (projectile.contentSize.width/2);
+            float ratio = (float) offY / (float) offX;
+            int realY = (realX * ratio) + projectile.position.y;
+            CGPoint realDest = ccp(realX, realY);
+            
+            // Determine the length of how far we're shooting
+            int offRealX = realX - projectile.position.x;
+            int offRealY = realY - projectile.position.y;
+            float length = sqrtf((offRealX*offRealX)+(offRealY*offRealY));
+            float velocity;
+            if(winSize.width==1024){
+                velocity = 1024/1; // 480pixels/1sec
+            }else{
+                velocity = 480/1; // 480pixels/1sec
+            }
+            float realMoveDuration = length/velocity;
+            
+            // Move projectile to actual endpoint
+            [projectile runAction:[CCSequence actions:
+                                   [CCMoveTo actionWithDuration:realMoveDuration position:realDest],
+                                   [CCCallFuncN actionWithTarget:self selector:@selector(spriteMoveFinished:)],
+                                   nil]];
+            projectile.tag = 2;
+            [_projectiles addObject:projectile];
+            AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+            appDelegate.score--;
+            spray=spray+38.4;
+            i++;
+        }
+    }else{
+        while (i<10) {
+            // Choose one of the touches to work with
+            CGPoint location = [touch locationInView:[touch view]];
+            location.x=spray;
+            NSLog(@"%f", location.x);
+            location = [[CCDirector sharedDirector] convertToGL:location];
+            
+            // Set up initial location of projectile
+            CGSize winSize = [[CCDirector sharedDirector] winSize];
+            CCSprite *projectile;
+            if (winSize.width==1024) {
+                projectile = [CCSprite spriteWithFile:PlayerImageIpad
+                                                 rect:CGRectMake(0, 0, 70, 48)];
+            }else{
+                projectile = [CCSprite spriteWithFile:PlayerImage
+                                                 rect:CGRectMake(0, 0, 68, 20)];
+            }
+            
+            projectile.position = ccp(20, winSize.height/2);
+            
+            // Determine offset of location to projectile
+            int offX = location.x - projectile.position.x;
+            int offY = location.y - projectile.position.y;
+            
+            // Bail out if we are shooting down or backwards
+            if (offX <= 0) return;
+            
+            // Ok to add now - we've double checked position
+            [self addChild:projectile];
+            
+            // Determine where we wish to shoot the projectile to
+            int realX = winSize.width + (projectile.contentSize.width/2);
+            float ratio = (float) offY / (float) offX;
+            int realY = (realX * ratio) + projectile.position.y;
+            CGPoint realDest = ccp(realX, realY);
+            
+            // Determine the length of how far we're shooting
+            int offRealX = realX - projectile.position.x;
+            int offRealY = realY - projectile.position.y;
+            float length = sqrtf((offRealX*offRealX)+(offRealY*offRealY));
+            float velocity;
+            if(winSize.width==1024){
+                velocity = 1024/1; // 480pixels/1sec
+            }else{
+                velocity = 480/1; // 480pixels/1sec
+            }
+            float realMoveDuration = length/velocity;
+            
+            // Move projectile to actual endpoint
+            [projectile runAction:[CCSequence actions:
+                                   [CCMoveTo actionWithDuration:realMoveDuration position:realDest],
+                                   [CCCallFuncN actionWithTarget:self selector:@selector(spriteMoveFinished:)],
+                                   nil]];
+            projectile.tag = 2;
+            [_projectiles addObject:projectile];
+            AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+            appDelegate.score--;
+            spray=spray+32.0;
+            i++;
+        }
+    }
+    if (appDelegate.superShot) {
+        [self performSelector:@selector(longTap:) withObject:touch afterDelay:0.5];
+    }
+    appDelegate.superShot=FALSE;
+    superShotItem.visible=FALSE;
+}
 - (void)ccTouchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     [[SimpleAudioEngine sharedEngine] playEffect:CondomFired];
     
@@ -183,8 +359,15 @@
     
     // Set up initial location of projectile
     CGSize winSize = [[CCDirector sharedDirector] winSize];
-    CCSprite *projectile = [CCSprite spriteWithFile:PlayerImage 
-                                               rect:CGRectMake(0, 0, 68, 20)];
+    CCSprite *projectile;
+    if (winSize.width==1024) {
+        projectile = [CCSprite spriteWithFile:PlayerImageIpad
+                                         rect:CGRectMake(0, 0, 70, 48)];
+    }else{
+        projectile = [CCSprite spriteWithFile:PlayerImage
+                                         rect:CGRectMake(0, 0, 68, 20)];
+    }
+    
     projectile.position = ccp(20, winSize.height/2);
     
     // Determine offset of location to projectile
@@ -207,7 +390,12 @@
     int offRealX = realX - projectile.position.x;
     int offRealY = realY - projectile.position.y;
     float length = sqrtf((offRealX*offRealX)+(offRealY*offRealY));
-    float velocity = 480/1; // 480pixels/1sec
+    float velocity;
+    if(winSize.width==1024){
+        velocity = 1024/1; // 480pixels/1sec
+    }else{
+        velocity = 480/1; // 480pixels/1sec
+    }
     float realMoveDuration = length/velocity;
     
     // Move projectile to actual endpoint
@@ -279,6 +467,10 @@
                             [[SimpleAudioEngine sharedEngine] playEffect:HeartEffect];
                         }else if ([powerUp.name isEqualToString:@"Star"]){
                             [[SimpleAudioEngine sharedEngine] playEffect:BonusEffect];
+                        }else if ([powerUp.name isEqualToString:@"superShot"]){
+                            [[SimpleAudioEngine sharedEngine] playEffect:BonusEffect];
+                            appDelegate.superShot=TRUE;
+                            superShotItem.visible=TRUE;
                         }
                         NSLog(@"Power Up collected");
                     }
@@ -350,6 +542,7 @@
         NSLog(@"%f",winSize.height);
         NSLog(@"%f",winSize.width);
         CCSprite* background;
+        CCSprite *player;
         if (winSize.width==568) {
             //init bg picture
             if (appDelegate.secondTime) {
@@ -360,7 +553,20 @@
             background.tag = 1;
             background.anchorPoint = CGPointMake(0, 0);
             [self addChild:background];
+            player = [CCSprite spriteWithFile:PlayerImage rect:CGRectMake(0, 0, 68, 40)];
 
+        }else if(winSize.width==1024){
+            //init bg picture
+            if (appDelegate.secondTime) {
+                background = [CCSprite spriteWithFile:Level5BackgroundIpad];
+            }else{
+                background = [CCSprite spriteWithFile:Level1BackgroundIpad];
+            }
+            background.tag = 1;
+            background.anchorPoint = CGPointMake(0, 0);
+            [self addChild:background];
+            player = [CCSprite spriteWithFile:PlayerImageIpad rect:CGRectMake(0, 0, 70, 48)];
+            
         }else{
             //init bg picture
             if (appDelegate.secondTime) {
@@ -371,6 +577,7 @@
             background.tag = 1;
             background.anchorPoint = CGPointMake(0, 0);
             [self addChild:background];
+            player = [CCSprite spriteWithFile:PlayerImage rect:CGRectMake(0, 0, 68, 40)];
 
         }
                 
@@ -378,7 +585,8 @@
 		// and as close to the left side edge as we can get
 		// Remember that position is based on the anchor point, and by default the anchor
 		// point is the middle of the object.
-		CCSprite *player = [CCSprite spriteWithFile:PlayerImage rect:CGRectMake(0, 0, 68, 40)];
+		
+        
 		player.position = ccp(player.contentSize.width/2, winSize.height/2);
 		[self addChild:player];
 		[[SimpleAudioEngine sharedEngine] stopBackgroundMusic];
@@ -398,7 +606,10 @@
 		
 		
         [self performSelector:@selector(addPowerUp) withObject:nil
-                   afterDelay:5];
+                   afterDelay:4];
+        
+        [self performSelector:@selector(addPowerUpSuper) withObject:nil
+                   afterDelay:8];
         
         // Standard method to create a button
         
@@ -416,7 +627,19 @@
         
         bombItem.position = ccp((winSize.width/2)-30, winSize.height-15);
         
-        CCMenu *pauseMenu = [CCMenu menuWithItems:pauseMenuItem,bombItem, nil];
+        superShotItem = [CCMenuItemImage
+                    itemFromNormalImage:SuperShotPowerUpImage selectedImage:SuperShotPowerUpImage
+                    target:self selector:nil ];
+        
+        superShotItem.position = ccp((winSize.width/2)+20, winSize.height-15);
+        if (appDelegate.superShot) {
+            superShotItem.visible=TRUE;
+        }else{
+            superShotItem.visible=FALSE;
+        }
+        
+        
+        CCMenu *pauseMenu = [CCMenu menuWithItems:pauseMenuItem,bombItem,superShotItem, nil];
         pauseMenu.position = CGPointZero;
         [self addChild:pauseMenu z:2];
         
@@ -425,9 +648,10 @@
 	return self;
 }
 -(void)pauseGame{
-
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     if(_pauseScreenUp ==FALSE)
     {
+        appDelegate.paused=TRUE;
         _pauseScreenUp=TRUE;
         //if you have music uncomment the line bellow
         //[[SimpleAudioEngine sharedEngine] pauseBackgroundMusic];
@@ -436,47 +660,101 @@
         pauseLayer = [CCLayerColor layerWithColor: ccc4(150, 150, 150, 125) width: s.width height: s.height];
         pauseLayer.position = CGPointZero;
         [self addChild: pauseLayer z:8];
+        if (s.width==568) {
+            
+            _pauseScreen =[CCSprite spriteWithFile:PauseMenuBackgroundIphone5];
+            _pauseScreen.position= ccp(s.width/2,s.height/2);
+            [self addChild:_pauseScreen z:8];
+            
+            
+            CCMenuItem *ResumeMenuItem = [CCMenuItemImage
+                                          itemFromNormalImage:PauseResumeButton selectedImage:PauseResumeButton
+                                          target:self selector:@selector(ResumeButtonTapped:)];
+            ResumeMenuItem.position = ccp(230, 285);
+            _pauseScreenMenu = [CCMenu menuWithItems:ResumeMenuItem, nil];
+            _pauseScreenMenu.position = ccp(0,0);
+            [self addChild:_pauseScreenMenu z:10];
+            
+        }else if(s.width==1024){
+            
+            _pauseScreen =[CCSprite spriteWithFile:PauseMenuBackgroundIpad];
+            _pauseScreen.position= ccp(s.width/2,s.height/2);
+            [self addChild:_pauseScreen z:8];
+            
+            
+            CCMenuItem *ResumeMenuItem = [CCMenuItemImage
+                                          itemFromNormalImage:PauseResumeButton selectedImage:PauseResumeButton
+                                          target:self selector:@selector(ResumeButtonTapped:)];
+            ResumeMenuItem.position = ccp(400, 650);
+            
+            _pauseScreenMenu = [CCMenu menuWithItems:ResumeMenuItem, nil];
+            _pauseScreenMenu.position = ccp(0,0);
+            [self addChild:_pauseScreenMenu z:10];
+            
+        }else{
+            
+            _pauseScreen =[CCSprite spriteWithFile:PauseMenuBackground];
+            _pauseScreen.position= ccp(s.width/2,s.height/2);
+            [self addChild:_pauseScreen z:8];
+            
+            
+            CCMenuItem *ResumeMenuItem = [CCMenuItemImage
+                                          itemFromNormalImage:PauseResumeButton selectedImage:PauseResumeButton
+                                          target:self selector:@selector(ResumeButtonTapped:)];
+            ResumeMenuItem.position = ccp(170, 270);
+            _pauseScreenMenu = [CCMenu menuWithItems:ResumeMenuItem, nil];
+            _pauseScreenMenu.position = ccp(0,0);
+            [self addChild:_pauseScreenMenu z:10];
+            
+        }
+        _pauseScreenMenu.opacity=0;
         
-        _pauseScreen =[CCSprite spriteWithFile:PauseMenuBg];
-        _pauseScreen.position= ccp(250,150);
-        [self addChild:_pauseScreen z:8];
-    
-        
-        CCMenuItem *ResumeMenuItem = [CCMenuItemImage
-                                      itemFromNormalImage:PauseResumeButton selectedImage:PauseResumeButton
-                                      target:self selector:@selector(ResumeButtonTapped:)];
-        ResumeMenuItem.position = ccp(250, 230);
-        
-        _pauseScreenMenu = [CCMenu menuWithItems:ResumeMenuItem, nil];
-        _pauseScreenMenu.position = ccp(0,0);
-        [self addChild:_pauseScreenMenu z:10];
     }
      
 }
 -(void)fireBomb{
-    
     bombItem.visible=NO;
     
     [[SimpleAudioEngine sharedEngine] playEffect:BombSpraySound];
     
     // Set up initial location of projectile
     CGSize winSize = [[CCDirector sharedDirector] winSize];
-    CCSprite *projectile = [CCSprite spriteWithFile:BombSprayImage
-                                               rect:CGRectMake(0, 0, 10, 320)];
-    projectile.position = ccp(20, winSize.height/2);
-    
-    // Ok to add now - we've double checked position
-    [self addChild:projectile];
-    
-    // Determine where we wish to shoot the projectile to
-    
-    CGPoint realDest = ccp(winSize.width, winSize.height/2);
     
     // Determine the length of how far we're shooting
-    float velocity = 480/1; // 480pixels/1sec
-    float realMoveDuration = 480/velocity;
-    
-    
+    float velocity;
+    float realMoveDuration;
+    CGPoint realDest;
+    CCSprite *projectile;
+    if(winSize.width==1024){
+        velocity = 1024/1; // 480pixels/1sec
+        projectile = [CCSprite spriteWithFile:BombSprayImageIpad
+                                         rect:CGRectMake(0, 0, 20, 768)];
+        projectile.position = ccp(20, winSize.height/2);
+        
+        // Ok to add now - we've double checked position
+        [self addChild:projectile];
+        
+        // Determine where we wish to shoot the projectile to
+        
+        realDest = ccp(winSize.width, winSize.height/2);
+        realMoveDuration = 1024/velocity;
+        
+    }else{
+        velocity = 480/1; // 480pixels/1sec
+        projectile = [CCSprite spriteWithFile:BombSprayImage
+                                         rect:CGRectMake(0, 0, 10, 320)];
+        projectile.position = ccp(20, winSize.height/2);
+        
+        // Ok to add now - we've double checked position
+        [self addChild:projectile];
+        
+        // Determine where we wish to shoot the projectile to
+        
+        realDest = ccp(winSize.width, winSize.height/2);
+        realMoveDuration = 480/velocity;
+        
+    }
+     
     
     // Move projectile to actual endpoint
     [projectile runAction:[CCSequence actions:
@@ -485,9 +763,11 @@
                            nil]];
     projectile.tag = 20;
     [_projectiles addObject:projectile];
-
+    
 }
 -(void)ResumeButtonTapped:(id)sender{
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    appDelegate.paused=FALSE;
     [self removeChild:_pauseScreen cleanup:YES];
     [self removeChild:_pauseScreenMenu cleanup:YES];
     [self removeChild:pauseLayer cleanup:YES];

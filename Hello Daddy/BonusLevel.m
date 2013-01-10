@@ -138,7 +138,12 @@
     int offRealX = realX - projectile.position.x;
     int offRealY = realY - projectile.position.y;
     float length = sqrtf((offRealX*offRealX)+(offRealY*offRealY));
-    float velocity = 480/1; // 480pixels/1sec
+    float velocity;
+    if(winSize.width==1024){
+        velocity = 1024/1; // 480pixels/1sec
+    }else{
+        velocity = 480/1; // 480pixels/1sec
+    }
     float realMoveDuration = length/velocity;
     
     // Move projectile to actual endpoint

@@ -31,6 +31,7 @@
     CCLayer *pauseLayer;
     CCSprite *_pauseScreen;
     CCMenu *_pauseScreenMenu;
+    CCMenuItem *superShotItem;
 
 }
 
@@ -44,4 +45,5 @@
 @property (nonatomic, assign) CCLayer *pauseLayer;
 @property (nonatomic, assign) CCSprite *_pauseScreen;
 @property (nonatomic, assign) CCMenu *_pauseScreenMenu;
+@property (nonatomic, assign) CCMenuItem *superShotItem;
 @end
