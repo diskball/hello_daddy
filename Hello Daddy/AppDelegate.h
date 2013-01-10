@@ -17,11 +17,15 @@
     int score;
     int lives;
     BOOL secondTime;
+    BOOL paused;
+    BOOL superShot;
 }
 
 @property (nonatomic, retain) UIWindow *window;
 @property int score;
 @property int lives;
 @property BOOL secondTime;
+@property BOOL paused;
+@property BOOL superShot;
 
 @end

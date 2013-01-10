@@ -20,6 +20,8 @@
 @synthesize score;
 @synthesize lives;
 @synthesize secondTime;
+@synthesize paused;
+@synthesize superShot;
 
 - (void) removeStartupFlicker
 {	//
@@ -113,12 +115,22 @@
     lives = 5;
     
     secondTime=FALSE;
+    
+    paused=FALSE;
+    
+    superShot=FALSE;
 	
 	// Removes the startup flicker
 	[self removeStartupFlicker];
 	
 	// Run the intro Scene
 	[[CCDirector sharedDirector] runWithScene: [HelloWorldLayer scene]];
+    
+#if !TARGET_IPHONE_SIMULATOR
+    [application registerForRemoteNotificationTypes:
+     UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound];
+#endif
+    
 }
 
 
@@ -127,7 +139,9 @@
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-	[[CCDirector sharedDirector] resume];
+    if (!paused) {
+        [[CCDirector sharedDirector] resume];
+    }
 }
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
@@ -156,6 +170,52 @@
 
 - (void)applicationSignificantTimeChange:(UIApplication *)application {
 	[[CCDirector sharedDirector] setNextDeltaTimeZero:YES];
+}
+
+#pragma mark -
+#pragma mark Remote notifications
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    // You can send here, for example, an asynchronous HTTP request to your web-server to store this deviceToken remotely.
+    NSLog(@"Did register for remote notifications: %@", deviceToken);
+    NSString *str = [NSString
+					 stringWithFormat:@"%@",deviceToken];
+    // NSLog(str);
+	NSString *Newdev=str;
+	Newdev = [Newdev stringByReplacingOccurrencesOfString:@"<" withString:@""];
+	Newdev = [Newdev stringByReplacingOccurrencesOfString:@">" withString:@""];
+	Newdev = [Newdev stringByReplacingOccurrencesOfString:@" " withString:@"%20"];
+    NSString *ulrString=[NSString stringWithFormat:@"http://ksoutonair.com/helloDaddyPush/device_tokens.php?token=%@",Newdev];
+    NSError *error = nil;
+    NSHTTPURLResponse *response = nil;
+    NSURLRequest *request = [NSURLRequest
+                             requestWithURL:[NSURL URLWithString:ulrString]
+                             cachePolicy:NSURLRequestReloadIgnoringCacheData
+                             timeoutInterval:3.0];
+    
+    
+    NSData *conn = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    
+}
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    NSLog(@"Fail to register for remote notifications: %@", error);
+}
+
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+	//[responseData setLength:0];
+    
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+	//[responseData appendData:data];
+}
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+	    
+}
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
 }
 
 - (void)dealloc {
