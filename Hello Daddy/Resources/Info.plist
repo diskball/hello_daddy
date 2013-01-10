@@ -12,12 +12,13 @@
 	<string></string>
 	<key>CFBundleIconFiles</key>
 	<array>
-		<string>Icon-72.png</string>
+		<string>appicon72.png</string>
 		<string>Icon-Small-50.png</string>
 		<string>Icon-Small.png</string>
 		<string>Icon-Small@2x.png</string>
 		<string>appicon57.png</string>
 		<string>appicon114.png</string>
+		<string>appicon144.png</string>
 	</array>
 	<key>CFBundleIcons</key>
 	<dict>
@@ -25,12 +26,13 @@
 		<dict>
 			<key>CFBundleIconFiles</key>
 			<array>
-				<string>Icon-72.png</string>
+				<string>appicon72.png</string>
 				<string>Icon-Small-50.png</string>
 				<string>Icon-Small.png</string>
 				<string>Icon-Small@2x.png</string>
 				<string>appicon57.png</string>
 				<string>appicon114.png</string>
+				<string>appicon144.png</string>
 			</array>
 			<key>UIPrerenderedIcon</key>
 			<true/>
@@ -50,6 +52,10 @@
 	<string>1.0</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>AC-Safe_Unicode.ttf</string>
+	</array>
 	<key>UIPrerenderedIcon</key>
 	<true/>
 	<key>UIRequiredDeviceCapabilities</key>
