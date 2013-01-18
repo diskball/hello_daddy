@@ -15,6 +15,7 @@
 #import "Monster.h"
 #import "Rankings.h"
 #import "AppDelegate.h"
+#import "HowToPlay.h"
 // HelloWorldLayer implementation
 @implementation HelloWorldLayer
 
@@ -86,15 +87,22 @@
                                     itemFromNormalImage:StartGameButton selectedImage:StartGameButton
                                  target:self selector:@selector(startGame) ];
         
-        startGame.position = ccp(winSize.width/2, winSize.height/2+50);
+        startGame.position = ccp(winSize.width/2, winSize.height/2+70);
         
         CCMenuItem *highscores = [CCMenuItemImage
                                  itemFromNormalImage:HighScoresButton selectedImage:HighScoresButton
                                  target:self selector:@selector(showRankings) ];
         
-        highscores.position = ccp(winSize.width/2, winSize.height/2-50);
+        highscores.position = ccp(winSize.width/2, winSize.height/2);
         
-        CCMenu *levelMenu = [CCMenu menuWithItems:startGame,highscores, nil];
+        
+        CCMenuItem *howToPlay = [CCMenuItemImage
+                                  itemFromNormalImage:HowToPlayButton selectedImage:HowToPlayButton
+                                  target:self selector:@selector(showHowToPlay) ];
+        
+        howToPlay.position = ccp(winSize.width/2, winSize.height/2-70);
+        
+        CCMenu *levelMenu = [CCMenu menuWithItems:startGame,highscores,howToPlay, nil];
         levelMenu.position = CGPointZero;
         [self addChild:levelMenu];
         
@@ -106,9 +114,53 @@
          */
         // Start up the background music
 		[[SimpleAudioEngine sharedEngine] playBackgroundMusic:MenuMusic loop:YES];
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        //[defaults setBool:NO forKey:@"hasRatedApp"];
+        int timesPlayed=[defaults integerForKey:@"timesPlayed"];
+        timesPlayed ++;
+        [defaults setInteger:timesPlayed forKey:@"timesPlayed"];
+        [defaults synchronize];
+        //Terms Of Use Alert
+        if(![defaults boolForKey:@"hasRatedApp"] && [defaults integerForKey:@"timesPlayed"]>5) {
+            //Show alert
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"Do you want to rate Hello Daddy?"
+                                                           delegate:self cancelButtonTitle:@"Never" otherButtonTitles:@"Later", @"Yes", nil];
+            [alert show];
+            [alert release];
+        }
+        
         
     }	
     return self;
+}
+- (void)alertView:(UIAlertView *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+	// the user clicked one of the OK/Cancel buttons
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	if (buttonIndex == 1)
+	{
+        NSLog(@"Later");
+        [defaults setInteger:0 forKey:@"timesPlayed"];
+        [defaults synchronize];
+        
+    }else if(buttonIndex == 2){
+        NSLog(@"Yes");
+        
+        [defaults setBool:YES forKey:@"hasRatedApp"];
+        [defaults synchronize];
+        NSURL *url = [NSURL URLWithString:@"itms-apps://itunes.com/apps/georgebafaloukas/hellodaddy"];
+        
+        if (![[UIApplication sharedApplication] openURL:url])
+            
+            NSLog(@"%@%@",@"Failed to open url:",[url description]);
+    }else {
+        NSLog(@"Never");
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        [defaults setBool:YES forKey:@"hasRatedApp"];
+        [defaults synchronize];
+    }
+}
+-(void)showHowToPlay{
+    [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration: 0.2 scene:[HowToPlay scene]]];
 }
 -(void)showRankings{
     [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration: 0.2 scene:[Rankings scene]]];

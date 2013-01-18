@@ -62,7 +62,7 @@
         appDelegate.lives--;
         if (appDelegate.lives>0) {
             [_lives livesChanged:appDelegate.lives];
-        }else {
+        }else if (appDelegate.lives==0){
             [_targets removeObject:sprite];
             GameOverScene *gameOverScene = [GameOverScene node];
             NSString *labelText=[NSString stringWithFormat:LoseMessage,appDelegate.score];
@@ -230,8 +230,8 @@
 -(void) longTap:(UITouch *)touch
 {
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    [[SimpleAudioEngine sharedEngine] playEffect:CondomFired];
-    [[SimpleAudioEngine sharedEngine] playEffect:CondomFired];
+    [[SimpleAudioEngine sharedEngine] playEffect:SuperShotEffect];
+    //[[SimpleAudioEngine sharedEngine] playEffect:CondomFired];
     int i=0;
     float spray=0.0;
     CGSize winSize = [[CCDirector sharedDirector] winSize];
@@ -545,6 +545,7 @@
             [[SimpleAudioEngine sharedEngine] preloadBackgroundMusic:Level2Music];
         }
         [[SimpleAudioEngine sharedEngine] preloadEffect:CondomFired];
+        [[SimpleAudioEngine sharedEngine] preloadEffect:SuperShotEffect];
         [[SimpleAudioEngine sharedEngine] preloadEffect:KillEffect];
 		// Enable touch events
 		self.isTouchEnabled = YES;

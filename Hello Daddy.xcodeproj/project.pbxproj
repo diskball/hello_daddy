@@ -196,6 +196,11 @@
 		048A04D216918B82002DEEBE /* forest1024.png in Resources */ = {isa = PBXBuildFile; fileRef = 048A04CA16918B81002DEEBE /* forest1024.png */; };
 		048A04D316918B82002DEEBE /* beach1024.png in Resources */ = {isa = PBXBuildFile; fileRef = 048A04CB16918B81002DEEBE /* beach1024.png */; };
 		048A04D416918B82002DEEBE /* livingroom1024.png in Resources */ = {isa = PBXBuildFile; fileRef = 048A04CC16918B82002DEEBE /* livingroom1024.png */; };
+		0491699816A40510001AF629 /* how_to_play.png in Resources */ = {isa = PBXBuildFile; fileRef = 0491699416A4050F001AF629 /* how_to_play.png */; };
+		0491699916A40510001AF629 /* HowToPlay480x320.png in Resources */ = {isa = PBXBuildFile; fileRef = 0491699516A40510001AF629 /* HowToPlay480x320.png */; };
+		0491699A16A40510001AF629 /* HowToPlay568x320.png in Resources */ = {isa = PBXBuildFile; fileRef = 0491699616A40510001AF629 /* HowToPlay568x320.png */; };
+		0491699B16A40510001AF629 /* HowToPlay1024x768.png in Resources */ = {isa = PBXBuildFile; fileRef = 0491699716A40510001AF629 /* HowToPlay1024x768.png */; };
+		0491699F16A40799001AF629 /* HowToPlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 0491699E16A40799001AF629 /* HowToPlay.m */; };
 		049C3E881691AB280083DB1C /* menu1024.png in Resources */ = {isa = PBXBuildFile; fileRef = 049C3E871691AB280083DB1C /* menu1024.png */; };
 		049F9AB5169718FA00D7A69D /* spray2.png in Resources */ = {isa = PBXBuildFile; fileRef = 049F9AB3169718FA00D7A69D /* spray2.png */; };
 		049F9AB6169718FA00D7A69D /* spray100x320.png in Resources */ = {isa = PBXBuildFile; fileRef = 049F9AB4169718FA00D7A69D /* spray100x320.png */; };
@@ -571,6 +576,12 @@
 		048A04CA16918B81002DEEBE /* forest1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = forest1024.png; sourceTree = "<group>"; };
 		048A04CB16918B81002DEEBE /* beach1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = beach1024.png; sourceTree = "<group>"; };
 		048A04CC16918B82002DEEBE /* livingroom1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = livingroom1024.png; sourceTree = "<group>"; };
+		0491699416A4050F001AF629 /* how_to_play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = how_to_play.png; sourceTree = "<group>"; };
+		0491699516A40510001AF629 /* HowToPlay480x320.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HowToPlay480x320.png; sourceTree = "<group>"; };
+		0491699616A40510001AF629 /* HowToPlay568x320.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HowToPlay568x320.png; sourceTree = "<group>"; };
+		0491699716A40510001AF629 /* HowToPlay1024x768.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HowToPlay1024x768.png; sourceTree = "<group>"; };
+		0491699D16A40799001AF629 /* HowToPlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HowToPlay.h; sourceTree = "<group>"; };
+		0491699E16A40799001AF629 /* HowToPlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HowToPlay.m; sourceTree = "<group>"; };
 		049C3E871691AB280083DB1C /* menu1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu1024.png; sourceTree = "<group>"; };
 		049F9AB3169718FA00D7A69D /* spray2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spray2.png; sourceTree = "<group>"; };
 		049F9AB4169718FA00D7A69D /* spray100x320.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spray100x320.png; sourceTree = "<group>"; };
@@ -790,6 +801,10 @@
 				0403BA8B1634591E00CF819F /* resume_angie.png */,
 				044E6C6D15EE0A01005D3FDC /* scifi003.mp3 */,
 				04FDD68915FF3FB000993AA6 /* Settings.png */,
+				0491699416A4050F001AF629 /* how_to_play.png */,
+				0491699516A40510001AF629 /* HowToPlay480x320.png */,
+				0491699616A40510001AF629 /* HowToPlay568x320.png */,
+				0491699716A40510001AF629 /* HowToPlay1024x768.png */,
 				044E6C6F15EE0A01005D3FDC /* shotgun.mp3 */,
 				044E6C7015EE0A01005D3FDC /* sp0.png */,
 				044E6C7115EE0A01005D3FDC /* sp1.png */,
@@ -1148,6 +1163,8 @@
 				044E6C8515EE0B2F005D3FDC /* GameOverClass.m */,
 				044E6C8615EE0B2F005D3FDC /* Rankings.h */,
 				044E6C8715EE0B2F005D3FDC /* Rankings.m */,
+				0491699D16A40799001AF629 /* HowToPlay.h */,
+				0491699E16A40799001AF629 /* HowToPlay.m */,
 			);
 			name = "Menu Screens";
 			sourceTree = "<group>";
@@ -1363,6 +1380,10 @@
 				049F9AB6169718FA00D7A69D /* spray100x320.png in Resources */,
 				049F9ACA1699B1E100D7A69D /* appicon72.png in Resources */,
 				049F9ACC169C3F6800D7A69D /* condom2.png in Resources */,
+				0491699816A40510001AF629 /* how_to_play.png in Resources */,
+				0491699916A40510001AF629 /* HowToPlay480x320.png in Resources */,
+				0491699A16A40510001AF629 /* HowToPlay568x320.png in Resources */,
+				0491699B16A40510001AF629 /* HowToPlay1024x768.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1485,6 +1506,7 @@
 				044E6C2415EE0970005D3FDC /* AppDelegate.m in Sources */,
 				044E6C2715EE0970005D3FDC /* RootViewController.m in Sources */,
 				04FC532815EE0FC9004E3A7A /* SpermGame.xcdatamodel in Sources */,
+				0491699F16A40799001AF629 /* HowToPlay.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -28,7 +28,7 @@
 //define effects
 #define KillEffect         @"blast.mp3"
 #define HeartEffect        @"liveUpSound.mp3"
-#define LifeLostEffect     @"peter_gunn.mp3"
+#define SuperShotEffect     @"shotgun.mp3"
 #define CondomFired        @"scifi003.mp3"
 #define LoadingEffect      @"woo-hoo.mp3"
 #define BonusEffect        @"starSound.mp3"
@@ -42,6 +42,9 @@
 #define HighscoresBackgroundIphone5     @"pausemenu_angie5.png"
 #define HighscoresBackground            @"pausemenu_angie.png"
 #define HighscoresBackgroundIpad        @"pausemenu_angieiPad.png"
+#define HowtoplayBackgroundIphone5      @"HowToPlay568x320.png"
+#define HowtoplayBackground             @"HowToPlay480x320.png"
+#define HowtoplayBackgroundIpad         @"HowToPlay1024x768.png"
 #define GameOverBackground              @"gameover480x320.png"
 #define GameOverBackgroundIphone5       @"gameover568x320.png"
 #define GameOverBackgroundIpad          @"gameover1024x768.png"
@@ -121,6 +124,7 @@
 
 #define StartGameButton     @"startgame_angie.png"
 #define HighScoresButton    @"highscores_angie.png"
+#define HowToPlayButton     @"how_to_play.png"
 
 
 
