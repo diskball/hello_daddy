@@ -14,6 +14,7 @@
 #import "AppDelegate.h"
 #import "Level3Layer.h"
 #import "PowerUp.h"
+#import "ABGameKitHelper.h"
 
 // HelloWorldLayer implementation
 
@@ -611,11 +612,15 @@
             [self schedule:@selector(gameLogic:) interval:0.5];
             // Start up the background music
             [[SimpleAudioEngine sharedEngine] playBackgroundMusic:Level2MusicSec loop:YES];
+            [[ABGameKitHelper sharedClass] reportAchievement:@"fifthRound" percentComplete:100];
+            [[ABGameKitHelper sharedClass] showNotification:@"Fifth Round Complete!" message:@"Will you last these fast swimmers?" identifier:@"fifthRound"];
         }else{
             // Call game logic about every second
             [self schedule:@selector(gameLogic:) interval:1.0];
             // Start up the background music
             [[SimpleAudioEngine sharedEngine] playBackgroundMusic:Level2Music loop:YES];
+            [[ABGameKitHelper sharedClass] reportAchievement:@"firstRound" percentComplete:100];
+            [[ABGameKitHelper sharedClass] showNotification:@"First Round Complete!" message:@"Were you lucky?Things are getting trickier now!" identifier:@"firstRound"];
         }
 
 		[self schedule:@selector(update:)];
@@ -660,6 +665,7 @@
         [self addChild:pauseMenu z:2];
         
 	}
+    
 	return self;
 }
 -(void)pauseGame{
@@ -725,7 +731,7 @@
         _pauseScreenMenu.opacity=0;
         
     }
-    
+
 }
 -(void)fireBomb{
     bombItem.visible=NO;

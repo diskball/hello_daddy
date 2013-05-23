@@ -16,6 +16,7 @@
 #import "Rankings.h"
 #import "AppDelegate.h"
 #import "HowToPlay.h"
+#import "ABGameKitHelper.h"
 // HelloWorldLayer implementation
 @implementation HelloWorldLayer
 
@@ -163,6 +164,8 @@
     [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration: 0.2 scene:[HowToPlay scene]]];
 }
 -(void)showRankings{
+    //[[ABGameKitHelper sharedClass] showLeaderboard:@"helloDaddyLeaderboard"];
+    //[[ABGameKitHelper sharedClass] showAchievements];
     [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration: 0.2 scene:[Rankings scene]]];
 }
 - (void)startGame{

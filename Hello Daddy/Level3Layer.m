@@ -14,6 +14,7 @@
 #import "AppDelegate.h"
 #import "Level4Layer.h"
 #import "PowerUp.h"
+#import "ABGameKitHelper.h"
 
 // HelloWorldLayer implementation
 @implementation Level3Layer
@@ -665,6 +666,8 @@
             [self schedule:@selector(addPowerUpSuper) interval:10.0];
             // Start up the background music
             [[SimpleAudioEngine sharedEngine] playBackgroundMusic:Level3MusicSec loop:YES];
+            [[ABGameKitHelper sharedClass] reportAchievement:@"sixthRound" percentComplete:100];
+            [[ABGameKitHelper sharedClass] showNotification:@"Sixth Round Complete!" message:@"Getting there..." identifier:@"sixthRound"];
         }else{
             // Call game logic about every second
             [self schedule:@selector(gameLogic:) interval:1.0];
@@ -672,6 +675,8 @@
             [self schedule:@selector(addPowerUpSuper) interval:12.0];
             // Start up the background music
             [[SimpleAudioEngine sharedEngine] playBackgroundMusic:Level3Music loop:YES];
+            [[ABGameKitHelper sharedClass] reportAchievement:@"secondRound" percentComplete:100];
+            [[ABGameKitHelper sharedClass] showNotification:@"Second Round Complete!" message:@"Wow keep up the good work!" identifier:@"secondRound"];
         }
 		[self schedule:@selector(update:)];
         

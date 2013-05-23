@@ -12,6 +12,7 @@
 #import "LeaderBoard.h"
 #import "SimpleAudioEngine.h"
 #import <Social/Social.h>
+#import "ABGameKitHelper.h"
 #import <Accounts/Accounts.h>
 
 
@@ -119,7 +120,8 @@
         
         
         [self addChild:_label];
-        
+        AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        [[ABGameKitHelper sharedClass] reportScore:appDelegate.score forLeaderboard:@"helloDaddyLeaderboard"];
         
         /*
         [self runAction:[CCSequence actions:

@@ -14,6 +14,7 @@
 #import "AppDelegate.h"
 #import "PowerUp.h"
 #import "Level1Layer.h"
+#import "ABGameKitHelper.h"
 
 // HelloWorldLayer implementation
 @implementation Level4Layer
@@ -603,6 +604,8 @@
                     NSString *labelText=[NSString stringWithFormat:WinMessage,appDelegate.score];
                     [gameOverScene.layer.label setString:labelText];
                     [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration: 0.5 scene:gameOverScene]];
+                    [[ABGameKitHelper sharedClass] reportAchievement:@"winner" percentComplete:100];
+                    [[ABGameKitHelper sharedClass] showNotification:@"You Win!!!" message:@"It was a close call...but a father you are not!" identifier:@"winner"];
                 }
                 
             }
@@ -704,6 +707,8 @@
             [self schedule:@selector(addPowerUp) interval:5.0];
             // Start up the background music
             [[SimpleAudioEngine sharedEngine] playBackgroundMusic:Level4MusicSec loop:YES];
+            [[ABGameKitHelper sharedClass] reportAchievement:@"seventhRound" percentComplete:100];
+            [[ABGameKitHelper sharedClass] showNotification:@"Seventh Round Complete!" message:@"Now we will see how strong are you!!!" identifier:@"seventhRound"];
         }else{
             // Call game logic about every second
             [self schedule:@selector(gameLogic:) interval:1.0];
@@ -711,6 +716,8 @@
             [self schedule:@selector(addPowerUp) interval:10.0];
             // Start up the background music
             [[SimpleAudioEngine sharedEngine] playBackgroundMusic:Level4Music loop:YES];
+            [[ABGameKitHelper sharedClass] reportAchievement:@"thirdRound" percentComplete:100];
+            [[ABGameKitHelper sharedClass] showNotification:@"Third Round Complete!" message:@"You are on fire!!!Boss fight is imminent!" identifier:@"thirdRound"];
         }
 
 		[self schedule:@selector(update:)];
@@ -741,6 +748,7 @@
         [self addChild:pauseMenu z:2];
         
 	}
+    
 	return self;
 }
 -(void)pauseGame{

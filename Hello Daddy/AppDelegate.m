@@ -13,6 +13,7 @@
 #import "HelloWorldLayer.h"
 #import "RootViewController.h"
 #import "LeaderBoard.h"
+#import "ABGameKitHelper.h"
 
 @implementation AppDelegate
 
@@ -131,6 +132,8 @@
      UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound];
 #endif
     
+    [[ABGameKitHelper sharedClass] authenticatePlayer];
+    
 }
 
 
@@ -191,10 +194,11 @@
     NSURLRequest *request = [NSURLRequest
                              requestWithURL:[NSURL URLWithString:ulrString]
                              cachePolicy:NSURLRequestReloadIgnoringCacheData
-                             timeoutInterval:3.0];
+                             timeoutInterval:10.0];
     
     
     NSData *conn = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    NSLog(@"%@",conn);
     
 }
 

@@ -14,6 +14,7 @@
 #import "AppDelegate.h"
 #import "LeaderBoard.h"
 #import "PowerUp.h"
+#import "ABGameKitHelper.h"
 
 // HelloWorldLayer implementation
 @implementation Level1Layer
@@ -596,6 +597,8 @@
             [self schedule:@selector(gameLogic:) interval:0.5];
             // Start up the background music
             [[SimpleAudioEngine sharedEngine] playBackgroundMusic:Level1MusicSec loop:YES];
+            [[ABGameKitHelper sharedClass] reportAchievement:@"forthRound" percentComplete:100];
+            [[ABGameKitHelper sharedClass] showNotification:@"Forth Round Complete!" message:@"Escaped the first boss...new challnged to come ahead!" identifier:@"forthRound"];
         }else{
             // Call game logic about every second
             [self schedule:@selector(gameLogic:) interval:1.0];
